@@ -3,6 +3,16 @@ import authRepository from "../repositories/auth.repository.js";
 import authError from "../errors/auth.error.js";
 
 const register = async (signup_data) => {
+  // 인증 코드 확인
+  const verification = await prisma.emailVerification.findUnique({
+    where: { email },
+  });
+  if (!verification || verification.code !== code) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "인증 코드가 틀렸습니다." });
+  }
+
   const existing_user = await authRepository.findByEmail(signup_data.email);
   if (existing_user) {
     throw new authError.UserAlreadyExistsError("Email already registered");
@@ -17,6 +27,9 @@ const register = async (signup_data) => {
     agreed_privacy: signup_data.agreed_privacy,
     school: signup_data.school,
   });
+
+  // 인증 기록 삭제
+  await prisma.emailVerification.delete({ where: { email } });
 
   return {
     email: new_user.email,
