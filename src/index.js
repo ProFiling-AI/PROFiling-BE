@@ -1,9 +1,16 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import dotenv from "dotenv";
+import logger from "./logger.js";
+import app from "./app.js";
 
-async function main() {
-  const users = await prisma.user.findMany();
-  console.log(users);
-}
+dotenv.config();
+const port = process.env.PORT;
 
-main();
+// 기본 엔드포인트
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+// 서버 실행
+app.listen(port, () => {
+  logger.info(`🚀 Server listening on port ${port}`);
+});

@@ -10,7 +10,7 @@ datasource db {
 model User {
   id                    Int                    @id @default(autoincrement())
   name                  String                 @db.VarChar(36)
-  school                String
+  school                School
   major                 String?
   sub_major             String?
   grade                 Int?
@@ -83,7 +83,7 @@ model ProfessorCourse {
   id            Int                     @id @default(autoincrement())
   professor_id  Int
   subject_name  String
-  school        String
+  school        School
   created_at    DateTime                @default(now())
   professor     Professor               @relation(fields: [professor_id], references: [id])
   exams         ProfessorCourseExam[]
@@ -97,7 +97,7 @@ model Professor {
   gender            Gender
   department        String
   subject_name      String
-  school            String
+  school            School
   created_at        DateTime          @default(now())
   professor_courses ProfessorCourse[]
 }
@@ -283,4 +283,51 @@ enum AlertType {
 enum NotificationType {
   REVIEW
   CALENDAR
+}
+
+enum School {
+  KAYWON
+  SEOULARTS
+  SWC
+  GACHON
+  CATHOLIC
+  KONKUK
+  KYOUNGGI
+  KNU
+  KHU
+  KOREA
+  GIST
+  KOOKMIN
+  DANKOOK
+  DUKSUNG
+  DONGDUK
+  DONGGUK
+  MJU
+  SANGMYUNG
+  SOGANG
+  SEOULTECH
+  SNU
+  UOS
+  SWU
+  SKKU
+  SJU
+  SOOKMYUNG
+  SOONGSIL
+  SUNGSHIN
+  AJOU
+  YOUNSEI
+  YNU
+  YIU
+  EWHAIN
+  INHA
+  JEJUNU
+  CAU
+  POSTECH
+  KAIST
+  KARTS
+  HUFS
+  KAU
+  HANSUNG
+  HANYANG
+  HONGIK
 }
