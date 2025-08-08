@@ -14,12 +14,16 @@ const register = async (signup_data) => {
     email: signup_data.email,
     name: signup_data.name,
     password: hashed_password,
+    agreed_privacy: signup_data.agreed_privacy,
+    school: signup_data.school,
   });
 
   return {
-    id: new_user.id,
     email: new_user.email,
     name: new_user.name,
+    password: new_user.password,
+    agreed_privacy: new_user.agreed_privacy,
+    school: new_user.school,
   };
 };
 

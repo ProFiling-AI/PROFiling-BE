@@ -1,9 +1,24 @@
+import { School } from "@prisma/client";
+
 const registerDto = (body) => {
   const email = body.email;
+  const name = body.name;
   const password = body.password;
-  const verification_id = body.verificationId;
-  const nickname = body.nickname;
-  return { email, password, nickname, verification_id };
+  const agreed_privacy = body.agreed_privacy;
+
+  // 이메일에서 도메인 추출
+  const domain = email.split("@")[1];
+  const domain_parts = domain.split(".")[0];
+
+  // Prisma enum 값 목록 추출
+  const school_enum_values = Object.values(School);
+  const upper_school = domain_parts.toUpperCase();
+  // school enum에 포함되는지 확인
+  const school = school_enum_values.includes(upper_school)
+    ? upper_school
+    : null;
+
+  return { email, name, password, agreed_privacy, school };
 };
 
 const emailVerificationCodeDto = (body) => {
