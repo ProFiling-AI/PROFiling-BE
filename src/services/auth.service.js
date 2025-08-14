@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import authRepository from "../repositories/auth.repository.js";
 import authError from "../errors/auth.error.js";
 
@@ -40,6 +41,35 @@ const register = async (signup_data) => {
   };
 };
 
+const login = async (email, password) => {
+  const user = await authRepository.findUserByEmail(email);
+  if (!user) {
+    throw new authError.UserNotExistError("존재하지 않는 이메일입니다.", {
+      email,
+    });
+  }
+  const is_password_valid = await bcrypt.compare(password, user.password);
+  if (!is_password_valid) {
+    throw new authError.PasswordMismatchError("비밀번호가 일치하지 않습니다.");
+  }
+  if (user.isDeleted) {
+    throw new authError.UserQuitError("이미 탈퇴한 유저입니다.");
+  }
+  return user.id;
+};
+
+const generateTokens = (payload) => {
+  const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: process.env.ACCESS_TOKEN_EXPIRATION,
+  });
+  const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
+  });
+  return { access_token, refresh_token };
+};
+
 export default {
   register,
+  generateTokens,
+  login,
 };
