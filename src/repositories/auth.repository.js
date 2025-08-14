@@ -1,7 +1,7 @@
 import { prisma } from "../db.config.js";
 import authError from "../errors/auth.error.js";
 
-const findByEmail = async (email) => {
+const findUserByEmail = async (email) => {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -24,6 +24,6 @@ const createUser = async (new_user) => {
 };
 
 export default {
-  findByEmail,
+  findUserByEmail,
   createUser,
 };

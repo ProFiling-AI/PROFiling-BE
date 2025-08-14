@@ -12,4 +12,28 @@ const register = async (req, res, next) => {
   }
 };
 
-export default { register };
+export const emailLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user_id = await authService.login(email, password);
+    const { access_token, refresh_token } = authService.generateTokens({
+      email: email,
+      id: user_id,
+    });
+    return res.success(
+      {
+        userId: user_id,
+        accessToken: access_token,
+        refreshToken: refresh_token,
+      },
+      StatusCodes.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  register,
+  emailLogin,
+};
