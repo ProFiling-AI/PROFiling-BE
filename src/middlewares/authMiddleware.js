@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import logger from "../logger.js";
 
+
 dotenv.config();
 
 const authMiddleware = (req, res, next) => {
@@ -19,7 +20,7 @@ if (!authHeader || !authHeader.startsWith("Bearer ")) {
 const token = authHeader.split(" ")[1].trim();
 
 try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     // 토큰 페이로드에 사용자를 식별할 수 있는 id(혹은 sub)가 있어야 함
     // 만약 토큰에 id 대신 sub를 넣는다면 decoded.sub로 바꿔주세요.
@@ -37,6 +38,7 @@ try {
     req.user = { id: userId, ...(decoded.email ? { email: decoded.email } : {}) };
     next();
 } catch (err) {
+    console.log(err)
     logger.warn(`JWT verification failed: ${err.message}`);
     return res.status(401).json({
     resultType: "FAIL",
