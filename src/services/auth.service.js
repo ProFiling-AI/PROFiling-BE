@@ -100,9 +100,37 @@ const sendVerificationEmail = async (email) => {
   }
 };
 
+const checkEmailVerificationCode = async (email, verification_code) => {
+  const email_verification = await authRepository.findEmailVerification(email);
+  if (!email_verification) {
+    throw new authError.EmailVerificationNotExistsError(
+      "이메일 인증이 완료되지 않았습니다.",
+      { email }
+    );
+  }
+
+  const currentTime = Date.now();
+  if (email_verification.codeExpires < currentTime) {
+    throw new authError.EmailVerificationExpiredError(
+      "인증 코드가 만료되었습니다.",
+      { email }
+    );
+  }
+
+  if (email_verification.verificationCode !== verification_code) {
+    throw new authError.InvalidVerificationCodeError(
+      "잘못된 인증 코드입니다.",
+      { email }
+    );
+  }
+  const updated_verification = await authRepository.setEmailVerifiedTrue(email);
+  return updated_verification;
+};
+
 export default {
   register,
   generateTokens,
   login,
   sendVerificationEmail,
+  checkEmailVerificationCode,
 };

@@ -55,10 +55,31 @@ const createEmailVerification = async (new_email_verification) => {
   }
 };
 
+const setEmailVerifiedTrue = async (email) => {
+  try {
+    const updated_verification = await prisma.emailVerification.update({
+      where: {
+        email: email, // 해당 이메일을 찾음
+      },
+      data: {
+        verified: true, // verified 값을 true로 설정
+      },
+    });
+    return {
+      id: updated_verification.id,
+      email: updated_verification.email,
+      verified: updated_verification.verified,
+    };
+  } catch (error) {
+    throw new authError.DataBaseError("Error on updating email verification");
+  }
+};
+
 export default {
   findUserByEmail,
   createUser,
   findEmailVerification,
   deleteEmailVerification,
   createEmailVerification,
+  setEmailVerifiedTrue,
 };
