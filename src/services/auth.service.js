@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import authRepository from "../repositories/auth.repository.js";
 import authError from "../errors/auth.error.js";
+import sendmail from "../utils/sendmail.util.js";
 
 const register = async (signup_data) => {
   // 인증 코드 확인
@@ -68,8 +70,39 @@ const generateTokens = (payload) => {
   return { access_token, refresh_token };
 };
 
+const generateCode = (size) => {
+  return crypto
+    .randomBytes(size / 2)
+    .toString("hex")
+    .toUpperCase();
+};
+
+const sendVerificationEmail = async (email) => {
+  const verification_code = generateCode(6);
+
+  // 전에 인증했던 코드 찾아서 있으면 삭제
+  const email_verification = await authRepository.findEmailVerification(email);
+  if (email_verification) {
+    await authRepository.deleteEmailVerification(email);
+  }
+
+  const new_email_verification = {
+    email,
+    verificationCode: verification_code,
+    codeExpires: new Date(Date.now() + 15 * 60 * 1000), // 유효기간=현재 시간 + 15분
+  };
+
+  await authRepository.createEmailVerification(new_email_verification);
+  try {
+    await sendmail.sendVerificationEmail(email, verification_code);
+  } catch (error) {
+    throw new authError.SendmailError("인증코드 전송 중 오류가 발생했습니다.");
+  }
+};
+
 export default {
   register,
   generateTokens,
   login,
+  sendVerificationEmail,
 };
