@@ -33,7 +33,21 @@ export const emailLogin = async (req, res, next) => {
   }
 };
 
+const sendVerificationCode = async (req, res, next) => {
+  try {
+    const email = req.body.email;
+    await authService.sendVerificationEmail(email);
+    return res.success(
+      { message: "인증 코드가 전송되었습니다." },
+      StatusCodes.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   register,
   emailLogin,
+  sendVerificationCode,
 };

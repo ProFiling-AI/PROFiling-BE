@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.post("/login", authController.emailLogin);
 router.post("/signup", authController.register);
+router.post("/send-verify-email", authController.sendVerificationCode);
 
 export default router;
