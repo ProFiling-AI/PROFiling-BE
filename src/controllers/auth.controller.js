@@ -46,8 +46,24 @@ const sendVerificationCode = async (req, res, next) => {
   }
 };
 
+const checkEmailVerificationCode = async (req, res, next) => {
+  try {
+    const { email, verification_code } = authDTO.emailVerificationCodeDto(
+      req.body
+    );
+    const email_verification = await authService.checkEmailVerificationCode(
+      email,
+      verification_code
+    );
+    return res.success(email_verification, StatusCodes.OK);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export default {
   register,
   emailLogin,
   sendVerificationCode,
+  checkEmailVerificationCode,
 };
