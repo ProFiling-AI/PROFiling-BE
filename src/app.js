@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route.js";
 import professorRoutes from "./routes/professor.route.js";
+import subjectRoutes from "./routes/subject.route.js";
 import morganMiddleware from "./middlewares/morganMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
 import logger from "./logger.js";
@@ -35,6 +36,7 @@ app.use(express.json());
 // ✅ API 라우트 등록
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/professors", authMiddleware, professorRoutes);
+app.use("/api/v1/subject", subjectRoutes);
 
 // ✅ 마지막으로 전역 오류 처리 미들웨어를 추가
 app.use((err, req, res, next) => {
