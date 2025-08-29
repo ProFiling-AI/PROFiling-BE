@@ -10,5 +10,6 @@ router.post(
   "/check-email-verification-code",
   authController.checkEmailVerificationCode
 );
+router.post("/new-password", authController.setNewPassword);
 
 export default router;

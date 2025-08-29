@@ -148,32 +148,22 @@ export class MissingAuthorizationHeader extends Error {
   }
 }
 
-export class KakaoLoginError extends Error {
+export class UserQuitError extends Error {
   errorCode = "A016";
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statusCode = 500;
+    this.statusCode = 401;
     this.data = data;
   }
 }
 
-export class MissingKakaoTokenError extends Error {
+export class PasswordPolicyError extends Error {
   errorCode = "A017";
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statusCode = 401;
-    this.data = data;
-  }
-}
-
-export class UserQuitError extends Error {
-  errorCode = "A018";
-  constructor(reason, data) {
-    super(reason);
-    this.reason = reason;
-    this.statusCode = 401;
+    this.statusCode = 400;
     this.data = data;
   }
 }
@@ -194,7 +184,6 @@ export default {
   InvalidVerificationCodeError,
   EmailVerificationError,
   MissingAuthorizationHeader,
-  KakaoLoginError,
-  MissingKakaoTokenError,
   UserQuitError,
+  PasswordPolicyError,
 };

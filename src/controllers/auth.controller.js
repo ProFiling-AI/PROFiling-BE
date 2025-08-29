@@ -1,5 +1,6 @@
 import authService from "../services/auth.service.js";
 import authDTO from "../dtos/auth.dto.js";
+import authError from "../errors/auth.error.js";
 import { StatusCodes } from "http-status-codes";
 
 const register = async (req, res, next) => {
@@ -61,9 +62,34 @@ const checkEmailVerificationCode = async (req, res, next) => {
   }
 };
 
+const setNewPassword = async (req, res, next) => {
+  try {
+    const { email, new_password, confirm_password } = req.body;
+
+    // 1) 새 비밀번호 & 확인 일치 체크
+    if (new_password !== confirm_password) {
+      throw new authError.PasswordMismatchError("비밀번호가 맞지 않습니다.");
+    }
+
+    // 2) 비밀번호 정책 검사
+    const policy_ok = authService.validatePasswordPolicy(new_password);
+
+    // 3) 비밀번호 변경
+    await authService.resetPassword(email, new_password);
+
+    return res.success(
+      { message: "비밀번호가 재설정되었습니다." },
+      StatusCodes.OK
+    );
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export default {
   register,
   emailLogin,
   sendVerificationCode,
   checkEmailVerificationCode,
+  setNewPassword,
 };

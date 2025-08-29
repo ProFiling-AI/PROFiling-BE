@@ -75,6 +75,28 @@ const setEmailVerifiedTrue = async (email) => {
   }
 };
 
+const updateUserPassword = async (user_id, hashed_password) => {
+  try {
+    const updated = await prisma.user.update({
+      where: { id: user_id },
+      data: {
+        password: hashed_password,
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    });
+
+    return {
+      id: updated.id,
+      email: updated.email,
+    };
+  } catch (error) {
+    throw new authError.DataBaseError("Error on updating user password");
+  }
+};
+
 export default {
   findUserByEmail,
   createUser,
@@ -82,4 +104,5 @@ export default {
   deleteEmailVerification,
   createEmailVerification,
   setEmailVerifiedTrue,
+  updateUserPassword,
 };
