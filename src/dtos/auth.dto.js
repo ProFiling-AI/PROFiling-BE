@@ -1,5 +1,5 @@
 import { School } from "@prisma/client";
-
+  
 const registerDto = (body) => {
   const email = body.email;
   const name = body.name;
