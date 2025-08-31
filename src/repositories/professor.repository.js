@@ -1,23 +1,49 @@
 import { prisma } from "../db.config.js";
 import authError from "../errors/auth.error.js";
 
-const findProfessor =  async (professor_id) => {
-    try {
-        return await prisma.professor.findMany({
-        where: { id: professor_id },
-            select: {
-            name: true,
-            department: true,
-            gender: true,
-            subject_name: true,
-        },
+const findProfessor = async (professor_id) => {
+  try {
+    return await prisma.professor.findMany({
+      where: { id: professor_id },
+      select: {
+        name: true,
+        department: true,
+        gender: true,
+        subject_name: true,
+      },
     });
-    } catch (error) {
-        throw new authError.DataBaseError('Error on finding professor list');
-    }
-    
+  } catch (error) {
+    throw new authError.DataBaseError("Error on finding professor list");
+  }
+};
+
+// 특정 userId로 등록된 교수들 조회
+const findProfessorMy = async (user_id) => {
+  try {
+    return await prisma.userProfessorSubject.findMany({
+      where: { user_id: user_id },
+      select: {
+        professor_course: {
+          select: {
+            professor_id: true,
+            professor: {
+              select: {
+                name: true,
+                department: true,
+                gender: true,
+                subject_name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw new authError.DataBaseError("Error on finding professor list");
+  }
 };
 
 export default {
-    findProfessor,
-}
+  findProfessor,
+  findProfessorMy,
+};
