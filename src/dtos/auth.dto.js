@@ -22,9 +22,9 @@ const registerDto = (body) => {
 };
 
 const emailVerificationCodeDto = (body) => {
-  const verification_code = body.verificationCode;
   const email = body.email;
-  return { verification_code, email };
+  const verification_code = body.verification_code;
+  return { email, verification_code };
 };
 
 export default {

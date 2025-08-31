@@ -100,9 +100,69 @@ const sendVerificationEmail = async (email) => {
   }
 };
 
+const checkEmailVerificationCode = async (email, verification_code) => {
+  const email_verification = await authRepository.findEmailVerification(email);
+  if (!email_verification) {
+    throw new authError.EmailVerificationNotExistsError(
+      "이메일 인증이 완료되지 않았습니다.",
+      { email }
+    );
+  }
+
+  const currentTime = Date.now();
+  if (email_verification.codeExpires < currentTime) {
+    throw new authError.EmailVerificationExpiredError(
+      "인증 코드가 만료되었습니다.",
+      { email }
+    );
+  }
+
+  if (email_verification.verificationCode !== verification_code) {
+    throw new authError.InvalidVerificationCodeError(
+      "잘못된 인증 코드입니다.",
+      { email }
+    );
+  }
+  const updated_verification = await authRepository.setEmailVerifiedTrue(email);
+  return updated_verification;
+};
+
+// 8자 이상 + (영문/숫자/특수문자) 중 3가지 이상
+const validatePasswordPolicy = (pw) => {
+  if (typeof pw !== "string" || pw.length < 8) return false;
+  const has_letter = /[A-Za-z]/.test(pw);
+  const has_digit = /[0-9]/.test(pw);
+  const has_special = /[^A-Za-z0-9]/.test(pw);
+  const policy_ok =
+    [has_letter, has_digit, has_special].filter(Boolean).length >= 3;
+
+  if (!policy_ok) {
+    throw new authError.PasswordPolicyError("비밀번호 조건에 맞지 않습니다.");
+  }
+  return;
+};
+
+const resetPassword = async (email, new_password) => {
+  const user = await authRepository.findUserByEmail(email);
+  if (!user) {
+    throw new authError.UserNotExistError("존재하지 않는 이메일입니다.", {
+      email,
+    });
+  }
+  if (user.isDeleted) {
+    throw new authError.UserQuitError("이미 탈퇴한 유저입니다.");
+  }
+  const hashed_password = await bcrypt.hash(new_password, 10);
+  await authRepository.updateUserPassword(user.id, hashed_password);
+  return user.id;
+};
+
 export default {
   register,
   generateTokens,
   login,
   sendVerificationEmail,
+  checkEmailVerificationCode,
+  validatePasswordPolicy,
+  resetPassword,
 };
