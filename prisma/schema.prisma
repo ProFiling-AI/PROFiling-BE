@@ -46,7 +46,7 @@ model Subject {
   user_id          Int
   subject_name     String
   created_at       DateTime               @default(now())
-  deleted_at       DateTime
+  deleted_at       DateTime?
   quizzes          Quiz[]
   recordings       Recording[]
   user             User                   @relation(fields: [user_id], references: [id])
