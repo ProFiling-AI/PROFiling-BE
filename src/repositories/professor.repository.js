@@ -17,20 +17,31 @@ const findProfessor = async (professor_id) => {
   }
 };
 
-/*const createProfessorReview = async (professor_course_id, content) => {
+// 특정 userId로 등록된 교수들 조회
+const findProfessorMy = async (user_id) => {
   try {
-    const created_review = await prisma.professorCourseReview.create({
-      data: {
-        professor_course_id: Number(professor_course_id),
-        content,
+    return await prisma.userProfessorSubject.findMany({
+      where: { user_id: user_id },
+      select: {
+        professor_course: {
+          select: {
+            professor_id: true,
+            professor: {
+              select: {
+                name: true,
+                department: true,
+                gender: true,
+                subject_name: true,
+              },
+            },
+          },
+        },
       },
     });
-    return created_review;
   } catch (error) {
-    throw new authError.DataBaseError("Error on creating professor review");
+    throw new authError.DataBaseError("Error on finding professor list");
   }
 };
-*/
 
 const createProfessorReview = async (professor_course_id, content) => {
   try {
@@ -55,5 +66,6 @@ const createProfessorReview = async (professor_course_id, content) => {
 
 export default {
   findProfessor,
+  findProfessorMy,
   createProfessorReview,
 };
