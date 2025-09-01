@@ -1,9 +1,14 @@
 import express from "express";
 import professorController from "../controllers/professor.controller.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// 검색 전 모든 교수들의 리스트
 router.get("/list", professorController.getProfessorList);
+router.post(
+  "/:professor_course_id/review",
+  authMiddleware,
+  professorController.postProfessorReview
+);
 
 export default router;

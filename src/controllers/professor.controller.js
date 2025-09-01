@@ -10,6 +10,23 @@ const getProfessorList = async (req, res, next) => {
   }
 };
 
+const postProfessorReview = async (req, res, next) => {
+  try {
+    const { professor_course_id } = req.params;
+    const { content } = req.body;
+
+    const newReview = await professorService.postProfessorReview(
+      professor_course_id,
+      content
+    );
+
+    return res.success(newReview, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getProfessorList,
+  postProfessorReview,
 };
