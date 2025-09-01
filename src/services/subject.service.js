@@ -8,6 +8,14 @@ const getSubjectListById = async (user_id) => {
   return subject_list;
 };
 
+const createSubjectById = async (user_id, subject_name) => {
+  const subjects = await subjectRepository.createSubject(user_id, subject_name);
+  const new_subject = subjectDto.newSubjectDto(subjects);
+
+  return new_subject;
+};
+
 export default {
   getSubjectListById,
+  createSubjectById,
 };

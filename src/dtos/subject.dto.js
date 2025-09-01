@@ -8,6 +8,14 @@ const subjectListDto = (user_id, list = []) => {
   };
 };
 
+const newSubjectDto = (subject) => {
+  return {
+    id: subject.id,
+    subject_name: subject.subject_name,
+  };
+};
+
 export default {
   subjectListDto,
+  newSubjectDto,
 };
