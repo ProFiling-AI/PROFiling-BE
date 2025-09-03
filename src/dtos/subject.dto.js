@@ -15,7 +15,16 @@ const newSubjectDto = (subject) => {
   };
 };
 
+const deleteSubjectDto = (subject) => {
+  return {
+    subject_id: subject.subject_id,
+    deleted_at: subject.deleted_at,
+    affected_recordings: subject.affected_recordings,
+  };
+};
+
 export default {
   subjectListDto,
   newSubjectDto,
+  deleteSubjectDto,
 };

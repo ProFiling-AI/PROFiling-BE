@@ -25,7 +25,19 @@ const createMySubject = async (req, res, next) => {
   }
 };
 
+const deleteMySubject = async (req, res, next) => {
+  try {
+    const subject_id = Number(req.params.id);
+    const user_id = req.user.id;
+    const subject = await subjectService.deleteSubjectById(user_id, subject_id);
+    return res.success(subject, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getMySubjectList,
   createMySubject,
+  deleteMySubject,
 };

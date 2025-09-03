@@ -11,5 +11,6 @@ router.post(
   authMiddleware,
   subjectController.createMySubject
 );
+router.delete("/delete/:id", authMiddleware, subjectController.deleteMySubject);
 
 export default router;
