@@ -22,8 +22,20 @@ const deleteSubjectById = async (user_id, subject_id) => {
   return deleted_subject;
 };
 
+const renameSubjectById = async (user_id, subject_id, new_subject_name) => {
+  const subject = await subjectRepository.renameSubject(
+    user_id,
+    subject_id,
+    new_subject_name
+  );
+  const renamed_subject = subjectDto.renameSubjectDto(subject);
+
+  return renamed_subject;
+};
+
 export default {
   getSubjectListById,
   createSubjectById,
   deleteSubjectById,
+  renameSubjectById,
 };

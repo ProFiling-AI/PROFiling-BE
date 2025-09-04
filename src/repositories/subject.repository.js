@@ -97,8 +97,33 @@ const deleteSubject = async (user_id, id) => {
   }
 };
 
+const renameSubject = async (user_id, subject_id, subject_name) => {
+  try {
+    const existing = await prisma.subject.findFirst({
+      where: { id: subject_id, user_id },
+    });
+
+    if (!existing) {
+      throw new subjectError.SubjectNotExistError(
+        "해당 과목을 찾을 수 없습니다."
+      );
+    }
+
+    const updated = await prisma.subject.update({
+      where: { id: subject_id },
+      data: { subject_name },
+      select: { id: true, subject_name: true },
+    });
+
+    return updated;
+  } catch (error) {
+    throw new subjectError.ModifySubjectError("Error on renaming subject");
+  }
+};
+
 export default {
   getSubjectList,
   createSubject,
   deleteSubject,
+  renameSubject,
 };

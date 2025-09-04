@@ -36,8 +36,25 @@ const deleteMySubject = async (req, res, next) => {
   }
 };
 
+const renameMySubject = async (req, res, next) => {
+  try {
+    const subject_id = Number(req.params.id);
+    const user_id = req.user.id;
+    const new_subject_name = req.body.subject_name;
+    const subject = await subjectService.renameSubjectById(
+      user_id,
+      subject_id,
+      new_subject_name
+    );
+    return res.success(subject, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getMySubjectList,
   createMySubject,
   deleteMySubject,
+  renameMySubject,
 };
