@@ -31,9 +31,19 @@ const renameSubjectDto = (subject) => {
   };
 };
 
+const restoreSubjectDto = (subject) => {
+  return {
+    message: "과목이 복구되었습니다.",
+    subject_id: subject.updated.id,
+    deleted_at: subject.updated.deleted_at,
+    restored_recordings: subject.restored_recordings,
+  };
+};
+
 export default {
   subjectListDto,
   newSubjectDto,
   deleteSubjectDto,
   renameSubjectDto,
+  restoreSubjectDto,
 };

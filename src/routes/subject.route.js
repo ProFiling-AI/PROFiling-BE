@@ -13,5 +13,6 @@ router.post(
 );
 router.delete("/delete/:id", authMiddleware, subjectController.deleteMySubject);
 router.patch("/rename/:id", authMiddleware, subjectController.renameMySubject);
+router.post("/restore/:id", authMiddleware, subjectController.restoreMySubject);
 
 export default router;
