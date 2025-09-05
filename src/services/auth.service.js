@@ -50,6 +50,7 @@ const login = async (email, password) => {
       email,
     });
   }
+
   const is_password_valid = await bcrypt.compare(password, user.password);
   if (!is_password_valid) {
     throw new authError.PasswordMismatchError("비밀번호가 일치하지 않습니다.");
