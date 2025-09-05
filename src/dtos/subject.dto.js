@@ -23,8 +23,17 @@ const deleteSubjectDto = (subject) => {
   };
 };
 
+const renameSubjectDto = (subject) => {
+  return {
+    message: "과목명이 수정되었습니다.",
+    subject_id: subject.id,
+    subject_name: subject.subject_name,
+  };
+};
+
 export default {
   subjectListDto,
   newSubjectDto,
   deleteSubjectDto,
+  renameSubjectDto,
 };
