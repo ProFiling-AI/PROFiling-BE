@@ -137,7 +137,6 @@ model Recording {
   ended_at      DateTime
   deleted_at    DateTime?
   audio_path    String
-  stt_result    String?
   bookmarks     Bookmark[]
   highlights    Highlight[]
   memos         Memo[]
@@ -145,30 +144,25 @@ model Recording {
   subject       Subject        @relation(fields: [subject_id], references: [id])
   user          User           @relation(fields: [user_id], references: [id])
   schedules     Schedule[]
-  summary       Summary?
 }
 
 model Bookmark {
   id           Int       @id @default(autoincrement())
   recording_id Int
-  summary_id   Int
   timestamp    Float
   created_at   DateTime  @default(now())
   recording    Recording @relation(fields: [recording_id], references: [id])
-  summary      Summary   @relation(fields: [summary_id], references: [id])
 }
 
 model Memo {
   id           Int       @id @default(autoincrement())
   recording_id Int
-  summary_id   Int
   title        String    @default("제목을 입력하세요")
   content      String
   created_at   DateTime  @default(now())
   updated_at   DateTime?
   deleted_at   DateTime?
   recording    Recording @relation(fields: [recording_id], references: [id])
-  summary      Summary   @relation(fields: [summary_id], references: [id])
 }
 
 model Highlight {
@@ -177,15 +171,6 @@ model Highlight {
   section      String
   color        Color     @default(YELLOW)
   recording    Recording @relation(fields: [recording_id], references: [id])
-}
-
-model Summary {
-  id           Int        @id @default(autoincrement())
-  recording_id Int        @unique
-  content      String
-  bookmarks    Bookmark[]
-  memos        Memo[]
-  recording    Recording  @relation(fields: [recording_id], references: [id])
 }
 
 model Schedule {

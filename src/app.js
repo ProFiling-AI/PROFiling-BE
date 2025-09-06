@@ -6,6 +6,8 @@ import subjectRoutes from "./routes/subject.route.js";
 import morganMiddleware from "./middlewares/morganMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
 import logger from "./logger.js";
+import mongoose from "mongoose";
+import connectMongo from "./mongo.config.js";
 
 dotenv.config();
 const app = express();
@@ -49,5 +51,17 @@ app.use((err, req, res, next) => {
     success: null,
   });
 });
+
+(async () => {
+  try {
+    if (process.env.MONGO_URI) {
+      await connectMongo();
+    } else {
+      logger.warn("MONGO_URI not set. Skipping MongoDB connection.");
+    }
+  } catch (e) {
+    logger.error(`MongoDB connection failed: ${e.message}`);
+  }
+})();
 
 export default app;
