@@ -117,7 +117,45 @@ const renameSubject = async (user_id, subject_id, subject_name) => {
 
     return updated;
   } catch (error) {
+    if (error instanceof subjectError.SubjectNotExistError) {
+      throw error;
+    }
     throw new subjectError.ModifySubjectError("Error on renaming subject");
+  }
+};
+
+const restoreSubject = async (user_id, subject_id) => {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const existing = await tx.subject.findFirst({
+        where: { id: subject_id, user_id },
+      });
+
+      if (!existing) {
+        throw new subjectError.SubjectNotExistError(
+          "해당 과목을 찾을 수 없습니다."
+        );
+      }
+
+      const updated = await tx.subject.update({
+        where: { id: subject_id },
+        data: { deleted_at: null },
+        select: { id: true, deleted_at: true },
+      });
+
+      // 해당 폴더 내 녹음 전체 복구
+      const { count } = await tx.recording.updateMany({
+        where: { subject_id: subject_id, user_id },
+        data: { deleted_at: null },
+      });
+
+      return { updated, restored_recordings: count };
+    });
+  } catch (error) {
+    if (error instanceof subjectError.SubjectNotExistError) {
+      throw error;
+    }
+    throw new subjectError.RestoreSubjectError("Error on restoring subject");
   }
 };
 
@@ -126,4 +164,5 @@ export default {
   createSubject,
   deleteSubject,
   renameSubject,
+  restoreSubject,
 };
