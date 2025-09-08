@@ -11,5 +11,10 @@ router.post(
   authMiddleware,
   professorController.postProfessorReview
 );
+router.post(
+  "/:professor_course_id/exam",
+  authMiddleware,
+  professorController.postProfessorExam
+);
 
 export default router;

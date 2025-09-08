@@ -24,8 +24,16 @@ const postProfessorReview = async (professor_course_id, content) => {
   );
 };
 
+const postProfessorExam = async (professor_course_id, content) => {
+  return await professorRepository.createProfessorExam(
+    professor_course_id,
+    content
+  );
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
   postProfessorReview,
+  postProfessorExam,
 };

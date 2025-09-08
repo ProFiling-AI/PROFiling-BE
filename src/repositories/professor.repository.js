@@ -1,5 +1,8 @@
 import { prisma } from "../db.config.js";
 import authError from "../errors/auth.error.js";
+import professorError, {
+  CreateProfessorReviewError,
+} from "../errors/professor.error.js";
 
 const findProfessor = async (professor_id) => {
   try {
@@ -17,7 +20,6 @@ const findProfessor = async (professor_id) => {
   }
 };
 
-// 특정 userId로 등록된 교수들 조회
 const findProfessorMy = async (user_id) => {
   try {
     return await prisma.userProfessorSubject.findMany({
@@ -39,7 +41,9 @@ const findProfessorMy = async (user_id) => {
       },
     });
   } catch (error) {
-    throw new authError.DataBaseError("Error on finding professor list");
+    throw new professorError.MyProfessorNoExistError(
+      "Error on finding my professor list"
+    );
   }
 };
 
@@ -60,7 +64,31 @@ const createProfessorReview = async (professor_course_id, content) => {
       created_at: new_review.created_at,
     };
   } catch (error) {
-    throw new authError.DataBaseError("Error on creating professor review");
+    throw new professorError.CreateProfessorReviewError(
+      "Error on creating professor review"
+    );
+  }
+};
+
+const createProfessorExam = async (professor_course_id, content) => {
+  try {
+    const new_exam = await prisma.professorCourseExam.create({
+      data: {
+        professor_course_id: Number(professor_course_id),
+        content,
+      },
+    });
+
+    return {
+      exam_id: new_exam.id,
+      professor_course_id: new_exam.professor_course_id,
+      content: new_exam.content,
+      created_at: new_exam.created_at,
+    };
+  } catch (error) {
+    throw new professorError.CreateProfessorExamError(
+      "Error on creating professor exam"
+    );
   }
 };
 
@@ -68,4 +96,5 @@ export default {
   findProfessor,
   findProfessorMy,
   createProfessorReview,
+  createProfessorExam,
 };
