@@ -47,11 +47,12 @@ const findProfessorMy = async (user_id) => {
   }
 };
 
-const createProfessorReview = async (professor_course_id, content) => {
+const createProfessorReview = async (professor_course_id, rating, content) => {
   try {
     const new_review = await prisma.professorCourseReview.create({
       data: {
         professor_course_id: Number(professor_course_id),
+        rating,
         content,
       },
     });
@@ -60,6 +61,7 @@ const createProfessorReview = async (professor_course_id, content) => {
     return {
       review_id: new_review.id,
       professor_course_id: new_review.professor_course_id,
+      rating: new_review.rating,
       content: new_review.content,
       created_at: new_review.created_at,
     };

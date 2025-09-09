@@ -23,10 +23,19 @@ const getProfessorMy = async (req, res, next) => {
 const postProfessorReview = async (req, res, next) => {
   try {
     const { professor_course_id } = req.params;
-    const { content } = req.body;
+    const { rating, content } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        resultType: "FAIL",
+        error: "Rating must be between 1 and 5",
+        success: null,
+      });
+    }
 
     const new_review = await professorService.postProfessorReview(
       professor_course_id,
+      rating,
       content
     );
     return res.success(new_review, StatusCodes.OK);

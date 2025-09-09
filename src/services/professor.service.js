@@ -17,9 +17,10 @@ const getProfessorMy = async (user_id) => {
   return { professor_list };
 };
 
-const postProfessorReview = async (professor_course_id, content) => {
+const postProfessorReview = async (professor_course_id, rating, content) => {
   return await professorRepository.createProfessorReview(
     professor_course_id,
+    rating,
     content
   );
 };
