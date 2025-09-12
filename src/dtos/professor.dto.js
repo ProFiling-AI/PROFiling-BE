@@ -16,7 +16,15 @@ const professorMyListDto = (list) => {
   }));
 };
 
+const professorReviewDto = (list) => {
+  return list.map((list) => ({
+    professor_course_id: list.professor_course_id,
+    rating: list.rating,
+    content: list.content,
+  }));
+};
 export default {
   professorListDto,
   professorMyListDto,
+  professorReviewDto,
 };

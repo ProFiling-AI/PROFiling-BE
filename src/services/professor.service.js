@@ -32,9 +32,19 @@ const postProfessorExam = async (professor_course_id, content) => {
   );
 };
 
+const getProfessorReview = async (professor_couse_id) => {
+  const reviews = await professorRepository.findProfessorReview(
+    professor_couse_id
+  );
+  const review_list = await professorDTO.professorReviewDto(reviews);
+
+  return review_list;
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
   postProfessorReview,
   postProfessorExam,
+  getProfessorReview,
 };
