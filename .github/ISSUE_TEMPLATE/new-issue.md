@@ -3,7 +3,6 @@ name: New Issue
 about: Something else!
 title: "[Issue]"
 labels: ""
-assignees: sehwanii
 ---
 
 ## 🚀 이슈 설명 (Issue Description)
