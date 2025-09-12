@@ -45,6 +45,7 @@ model Subject {
   id               Int                    @id @default(autoincrement())
   user_id          Int
   subject_name     String
+  is_favorite      Boolean                @default(false)
   created_at       DateTime               @default(now())
   deleted_at       DateTime?
   quizzes          Quiz[]
