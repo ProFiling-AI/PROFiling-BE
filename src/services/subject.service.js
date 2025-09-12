@@ -40,10 +40,21 @@ const restoreSubjectById = async (user_id, subject_id) => {
   return restored_subject;
 };
 
+const addFavoriteSubjectById = async (user_id, subject_id, is_favorite) => {
+  const subject = await subjectRepository.favoriteSubject(
+    user_id,
+    subject_id,
+    is_favorite
+  );
+
+  return subject;
+};
+
 export default {
   getSubjectListById,
   createSubjectById,
   deleteSubjectById,
   renameSubjectById,
   restoreSubjectById,
+  addFavoriteSubjectById,
 };

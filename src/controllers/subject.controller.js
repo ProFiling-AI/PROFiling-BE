@@ -66,10 +66,27 @@ const restoreMySubject = async (req, res, next) => {
   }
 };
 
+const addFavoriteSubject = async (req, res, next) => {
+  try {
+    const subject_id = Number(req.params.id);
+    const user_id = req.user.id;
+    const is_favorite = req.body.is_favorite;
+    const favorite_subject = await subjectService.addFavoriteSubjectById(
+      user_id,
+      subject_id,
+      is_favorite
+    );
+    return res.success(favorite_subject, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getMySubjectList,
   createMySubject,
   deleteMySubject,
   renameMySubject,
   restoreMySubject,
+  addFavoriteSubject,
 };

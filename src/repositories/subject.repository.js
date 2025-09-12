@@ -1,5 +1,4 @@
 import { prisma } from "../db.config.js";
-import authError from "../errors/auth.error.js";
 import subjectError from "../errors/subject.error.js";
 
 import dayjs from "dayjs";
@@ -17,7 +16,7 @@ const getSubjectList = async (user_id) => {
       },
     });
   } catch (error) {
-    throw new authError.DataBaseError("Error on finding professor list");
+    throw new subjectError.SubjectListError("Error on finding subject list");
   }
 };
 
@@ -40,7 +39,7 @@ const createSubject = async (user_id, subject_name) => {
     if (error instanceof subjectError.SubjectAlreadyExistError) {
       throw error;
     }
-    throw new authError.DataBaseError("Error on creating subject");
+    throw new subjectError.CreateSubjectError("Error on creating subject");
   }
 };
 
@@ -159,10 +158,39 @@ const restoreSubject = async (user_id, subject_id) => {
   }
 };
 
+const favoriteSubject = async (user_id, subject_id, is_favorite) => {
+  try {
+    const existing = await prisma.subject.findFirst({
+      where: { id: subject_id, user_id },
+    });
+
+    if (!existing) {
+      throw new subjectError.SubjectNotExistError(
+        "해당 과목을 찾을 수 없습니다."
+      );
+    }
+    const updated = await prisma.subject.update({
+      where: { id: subject_id, user_id },
+      data: { is_favorite },
+      select: { id: true, is_favorite: true },
+    });
+
+    return updated;
+  } catch (error) {
+    if (error instanceof subjectError.SubjectNotExistError) {
+      throw error;
+    }
+    throw new subjectError.AddFavoriteSubjectError(
+      "Error on adding favorite subject"
+    );
+  }
+};
+
 export default {
   getSubjectList,
   createSubject,
   deleteSubject,
   renameSubject,
   restoreSubject,
+  favoriteSubject,
 };
