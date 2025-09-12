@@ -5,10 +5,21 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
 
-const getSubjectList = async (user_id) => {
+const getSubjectList = async (user_id, sort_by = "latest") => {
   try {
+    let order_by = [{ is_favorite: "desc" }];
+
+    if (sort_by === "name") {
+      order_by.push({ subject_name: "asc" }); // 이름순
+    } else {
+      order_by.push({ created_at: "desc" }); // 최신순
+    }
+
+    order_by.push({ id: "asc" });
+
     return await prisma.subject.findMany({
-      where: { user_id },
+      where: { user_id, deleted_at: null },
+      orderBy: order_by,
       select: {
         user_id: true,
         id: true,

@@ -4,7 +4,8 @@ import subjectService from "../services/subject.service.js";
 const getMySubjectList = async (req, res, next) => {
   try {
     const user_id = req.user.id;
-    const subjects = await subjectService.getSubjectListById(user_id);
+    const sort_by = req.query.sortBy || "latest";
+    const subjects = await subjectService.getSubjectListById(user_id, sort_by);
     return res.success(subjects, StatusCodes.OK);
   } catch (error) {
     next(error);
