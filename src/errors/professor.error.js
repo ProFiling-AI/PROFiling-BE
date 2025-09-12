@@ -18,8 +18,18 @@ export class CreateProfessorReviewError extends Error {
   }
 }
 
-export class CreateProfessorExamError extends Error {
+export class CreateProfessorRatingError extends Error {
   errorCode = "P003";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class CreateProfessorExamError extends Error {
+  errorCode = "P004";
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
@@ -32,4 +42,5 @@ export default {
   MyProfessorNoExistError,
   CreateProfessorReviewError,
   CreateProfessorExamError,
+  CreateProfessorRatingError,
 };

@@ -49,6 +49,12 @@ const findProfessorMy = async (user_id) => {
 
 const createProfessorReview = async (professor_course_id, rating, content) => {
   try {
+    if (!rating || rating < 1 || rating > 5) {
+      throw new professorError.CreateProfessorRatingError(
+        "Rating must be between 1 and 5"
+      );
+    }
+
     const new_review = await prisma.professorCourseReview.create({
       data: {
         professor_course_id: Number(professor_course_id),
