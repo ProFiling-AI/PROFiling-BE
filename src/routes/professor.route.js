@@ -21,5 +21,10 @@ router.get(
   authMiddleware,
   professorController.getProfessorReview
 );
+router.get(
+  "/:professor_course_id/exam",
+  authMiddleware,
+  professorController.getProfessorExam
+);
 
 export default router;

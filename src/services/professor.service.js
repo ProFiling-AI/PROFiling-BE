@@ -41,10 +41,18 @@ const getProfessorReview = async (professor_couse_id) => {
   return review_list;
 };
 
+const getProfessorExam = async (professor_couse_id) => {
+  const exams = await professorRepository.findProfessorExam(professor_couse_id);
+  const exam_list = await professorDTO.professorExamDto(exams);
+
+  return exam_list;
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
   postProfessorReview,
   postProfessorExam,
   getProfessorReview,
+  getProfessorExam,
 };

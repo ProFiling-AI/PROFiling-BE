@@ -63,10 +63,21 @@ const getProfessorReview = async (req, res, next) => {
   }
 };
 
+const getProfessorExam = async (req, res, next) => {
+  try {
+    const professor_course_id = Number(req.params.professor_course_id);
+    const exams = await professorService.getProfessorExam(professor_course_id);
+    return res.success(exams, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
   postProfessorReview,
   postProfessorExam,
   getProfessorReview,
+  getProfessorExam,
 };
