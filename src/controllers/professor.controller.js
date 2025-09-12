@@ -54,7 +54,6 @@ const postProfessorExam = async (req, res, next) => {
 const getProfessorReview = async (req, res, next) => {
   try {
     const professor_course_id = Number(req.params.professor_course_id);
-    console.log(professor_course_id);
     const reviews = await professorService.getProfessorReview(
       professor_course_id
     );

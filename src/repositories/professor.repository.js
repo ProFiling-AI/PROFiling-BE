@@ -111,7 +111,6 @@ const findProfessorReview = async (professor_course_id) => {
       },
     });
   } catch (error) {
-    console.log(error);
     throw new professorError.FindProfessorReviewError(
       "Error on finding professor review list"
     );
