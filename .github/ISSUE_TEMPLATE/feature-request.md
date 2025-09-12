@@ -3,7 +3,6 @@ name: Feature request
 about: Suggest an idea for this project
 title: "[Feat]"
 labels: ":sparkles: feature"
-assignees: sehwanii
 ---
 
 ## 🚀 기능 설명 (Feature Description)
