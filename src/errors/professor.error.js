@@ -3,7 +3,7 @@ export class MyProfessorNoExistError extends Error {
   constructor(reason, data) {
     super(reason);
     this.reason = reason;
-    this.statusCode = 400;
+    this.statusCode = 404;
     this.data = data;
   }
 }
@@ -38,9 +38,20 @@ export class CreateProfessorExamError extends Error {
   }
 }
 
+export class FindProfessorReviewError extends Error {
+  errorCode = "P005";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 500;
+    this.data = data;
+  }
+}
+
 export default {
   MyProfessorNoExistError,
   CreateProfessorReviewError,
   CreateProfessorExamError,
   CreateProfessorRatingError,
+  FindProfessorReviewError,
 };
