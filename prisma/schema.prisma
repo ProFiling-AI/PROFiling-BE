@@ -116,6 +116,7 @@ model ProfessorCourseReview {
   id                  Int             @id @default(autoincrement())
   professor_course_id Int
   content             String
+  rating              Int             @default(0)
   created_at          DateTime        @default(now())
   professor_course    ProfessorCourse @relation(fields: [professor_course_id], references: [id])
 }
