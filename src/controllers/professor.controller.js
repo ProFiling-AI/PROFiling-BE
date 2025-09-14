@@ -76,22 +76,9 @@ const getProfessorExam = async (req, res, next) => {
 const getProfessorSearch = async (req, res, next) => {
   try {
     const { keyword } = req.query;
-
-    if (!keyword) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        resultType: "FAIL",
-        error: "검색 키워드를 입력하세요.",
-        success: null,
-      });
-    }
-
     const professors = await professorService.getProfessorSearch(keyword);
 
-    return res.status(StatusCodes.OK).json({
-      resultType: "SUCCESS",
-      error: null,
-      success: professors,
-    });
+    return res.success(professors, StatusCodes.OK);
   } catch (error) {
     next(error);
   }
