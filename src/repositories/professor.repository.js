@@ -133,6 +133,30 @@ const findProfessorExam = async (professor_course_id) => {
   }
 };
 
+const searchProfessor = async (keyword) => {
+  try {
+    return await prisma.professor.findMany({
+      where: {
+        OR: [
+          { name: { contains: keyword } },
+          { subject_name: { contains: keyword } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        department: true,
+        gender: true,
+        subject_name: true,
+      },
+    });
+  } catch (error) {
+    throw new professorError.SearchProfessorError(
+      "Error on searching professors"
+    );
+  }
+};
+
 export default {
   findProfessor,
   findProfessorMy,
@@ -140,4 +164,5 @@ export default {
   createProfessorExam,
   findProfessorReview,
   findProfessorExam,
+  searchProfessor,
 };

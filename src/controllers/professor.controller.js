@@ -73,6 +73,17 @@ const getProfessorExam = async (req, res, next) => {
   }
 };
 
+const getProfessorSearch = async (req, res, next) => {
+  try {
+    const { keyword } = req.query;
+    const professors = await professorService.getProfessorSearch(keyword);
+
+    return res.success(professors, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
@@ -80,4 +91,5 @@ export default {
   postProfessorExam,
   getProfessorReview,
   getProfessorExam,
+  getProfessorSearch,
 };

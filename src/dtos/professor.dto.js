@@ -31,9 +31,20 @@ const professorExamDto = (list) => {
   }));
 };
 
+const professorSearchDto = (list) => {
+  return list.map((list) => ({
+    professor_id: list.id,
+    professor_name: list.name,
+    department: list.department,
+    gender: list.gender,
+    matched_subject: list.subject_name,
+  }));
+};
+
 export default {
   professorListDto,
   professorMyListDto,
   professorReviewDto,
   professorExamDto,
+  professorSearchDto,
 };
