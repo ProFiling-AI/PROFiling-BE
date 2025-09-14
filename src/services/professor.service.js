@@ -48,6 +48,12 @@ const getProfessorExam = async (professor_couse_id) => {
   return exam_list;
 };
 
+const getProfessorSearch = async (keyword) => {
+  const professors = await professorRepository.searchProfessor(keyword);
+  const professor_search_list = professorDTO.professorSearchDto(professors);
+  return professor_search_list;
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
@@ -55,4 +61,5 @@ export default {
   postProfessorExam,
   getProfessorReview,
   getProfessorExam,
+  getProfessorSearch,
 };

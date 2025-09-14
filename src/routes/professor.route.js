@@ -26,5 +26,6 @@ router.get(
   authMiddleware,
   professorController.getProfessorExam
 );
+router.get("/search", authMiddleware, professorController.getProfessorSearch);
 
 export default router;
