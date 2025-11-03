@@ -1,8 +1,10 @@
 import { prisma } from "../db.config.js";
 import authError from "../errors/auth.error.js";
-import professorError, {
-  CreateProfessorReviewError,
-} from "../errors/professor.error.js";
+import professorError from "../errors/professor.error.js";
+
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
 
 const findProfessor = async (professor_id) => {
   try {
@@ -157,6 +159,61 @@ const searchProfessor = async (keyword) => {
   }
 };
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const deleteProfessorMy = async (user_id, professor_course_ids) => {
+  const now = dayjs().tz("Asia/Seoul").toDate();
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const professors = await tx.userProfessorSubject.findMany({
+        where: {
+          user_id,
+          professor_course_id: { in: professor_course_ids },
+        },
+        select: { id: true, professor_course_id: true, deleted_at: true },
+      });
+
+      if (professors.length === 0) {
+        throw new professorError.DeleteProfessorMyError(
+          "등록된 교수를 찾을 수 없습니다."
+        );
+      }
+
+      const results = [];
+
+      for (const professor of professors) {
+        if (professor.deleted_at) {
+          results.push({
+            professor_course_id: professor.professor_course_id,
+            deleted_at: professor.deleted_at,
+            message: "이미 삭제된 교수입니다.",
+          });
+          continue;
+        }
+
+        await tx.userProfessorSubject.update({
+          where: { id: professor.id },
+          data: { deleted_at: now },
+        });
+
+        results.push({
+          professor_course_id: professor.professor_course_id,
+          deleted_at: now,
+          message: "교수 삭제 완료",
+        });
+      }
+
+      return results;
+    });
+  } catch (error) {
+    throw new professorError.DeleteProfessorMyError(
+      "Error on deleting my professor"
+    );
+  }
+};
+
 export default {
   findProfessor,
   findProfessorMy,
@@ -165,4 +222,5 @@ export default {
   findProfessorReview,
   findProfessorExam,
   searchProfessor,
+  deleteProfessorMy,
 };

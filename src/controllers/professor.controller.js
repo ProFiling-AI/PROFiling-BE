@@ -84,6 +84,20 @@ const getProfessorSearch = async (req, res, next) => {
   }
 };
 
+const deleteProfessorMy = async (req, res, next) => {
+  try {
+    const user_id = Number(req.user.id);
+    const { professor_course_id } = req.body;
+    const delete_my_professor = await professorService.deleteProfessorMy(
+      user_id,
+      professor_course_id
+    );
+    return res.success(delete_my_professor, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
@@ -92,4 +106,5 @@ export default {
   getProfessorReview,
   getProfessorExam,
   getProfessorSearch,
+  deleteProfessorMy,
 };

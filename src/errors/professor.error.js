@@ -68,6 +68,16 @@ export class SearchProfessorError extends Error {
   }
 }
 
+export class DeleteProfessorMyError extends Error {
+  errorCode = "P005";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 500;
+    this.data = data;
+  }
+}
+
 export default {
   MyProfessorNoExistError,
   CreateProfessorReviewError,
@@ -76,4 +86,5 @@ export default {
   FindProfessorReviewError,
   FindProfessorExamError,
   SearchProfessorError,
+  DeleteProfessorMyError,
 };

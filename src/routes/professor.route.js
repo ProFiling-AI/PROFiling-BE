@@ -27,5 +27,6 @@ router.get(
   professorController.getProfessorExam
 );
 router.get("/search", professorController.getProfessorSearch);
+router.delete("/delete", authMiddleware, professorController.deleteProfessorMy);
 
 export default router;
