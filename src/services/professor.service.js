@@ -1,5 +1,6 @@
 import professorRepository from "../repositories/professor.repository.js";
 import professorDTO from "../dtos/professor.dto.js";
+import professorError from "../errors/professor.error.js";
 
 const getProfessorList = async () => {
   // 1. DB(또는 데이터 저장소)에서 userId로 교수 데이터 조회
@@ -54,6 +55,14 @@ const getProfessorSearch = async (keyword) => {
   return professor_search_list;
 };
 
+const deleteProfessorMy = async (user_id, professor_course_id) => {
+  const delete_professor = await professorRepository.deleteProfessorMy(
+    user_id,
+    professor_course_id
+  );
+  return professorDTO.professorMyDeleteDto(delete_professor);
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
@@ -62,4 +71,5 @@ export default {
   getProfessorReview,
   getProfessorExam,
   getProfessorSearch,
+  deleteProfessorMy,
 };

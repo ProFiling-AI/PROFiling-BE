@@ -41,10 +41,19 @@ const professorSearchDto = (list) => {
   }));
 };
 
+const professorMyDeleteDto = (list) => {
+  return list.map((professor) => ({
+    professor_course_id: professor.professor_course_id,
+    deleted_at: professor.deleted_at,
+    message: professor.message, // 이미 삭제됨 / 삭제 완료 등
+  }));
+};
+
 export default {
   professorListDto,
   professorMyListDto,
   professorReviewDto,
   professorExamDto,
   professorSearchDto,
+  professorMyDeleteDto,
 };
