@@ -11,6 +11,6 @@ app.get("/", (req, res) => {
 });
 
 // 서버 실행
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   logger.info(`🚀 Server listening on port ${port}`);
 });
