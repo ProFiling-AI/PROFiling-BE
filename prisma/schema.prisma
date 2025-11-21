@@ -25,6 +25,8 @@ model User {
   recordings            Recording[]
   schedules             Schedule[]
   subjects              Subject[]
+  quiz                  Quiz[]
+  answer                Answer[]
   trash                 Trash[]
   plans                 UserPlanStatus[]
   user_created_subjects UserProfessorSubject[]
@@ -48,32 +50,70 @@ model Subject {
   is_favorite      Boolean                @default(false)
   created_at       DateTime               @default(now())
   deleted_at       DateTime?
-  quizzes          Quiz[]
   recordings       Recording[]
   user             User                   @relation(fields: [user_id], references: [id])
   created_subjects UserProfessorSubject[]
 }
 
 model Quiz {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  recording_id  Int
+  title         String
+  type          QuizType
+  total_score   Int
+  attempt       Int       @default(1)
+  created_at    DateTime  @default(now()) 
+
+  question      Question[]
+  user          User       @relation(fields: [user_id], references: [id])
+  recording     Recording  @relation(fields: [recording_id], references: [id])
+}
+
+model Question {
+  id           Int        @id @default(autoincrement())
+  quiz_id      Int
+  stem         String
+  explanation  String
+  score        Int        @default(10)   
+  blank_answer String?                   
+
+  quiz         Quiz       @relation(fields: [quiz_id], references: [id])
+  choices      QuizChoice[]
+  answers      Answer[]
+
+  @@index([quiz_id])
+}
+
+model QuizChoice {
   id          Int      @id @default(autoincrement())
-  subject_id  Int
-  name        String
-  type        QuizType
-  question    String
-  answer      String
-  explanation String
-  created_at  DateTime @default(now())
-  answers     Answer[]
-  subject     Subject  @relation(fields: [subject_id], references: [id])
+  question_id Int
+  content     String   
+  is_correct  Boolean  
+
+  answer      Answer[]
+  question    Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+
+  @@index([question_id])
 }
 
 model Answer {
-  id               Int      @id @default(autoincrement())
-  quiz_id          Int
-  submitted_answer String
-  is_correct       Boolean
-  submitted_at     DateTime @default(now())
-  quiz             Quiz     @relation(fields: [quiz_id], references: [id])
+  id            Int       @id @default(autoincrement())
+  question_id   Int
+  user_id       Int
+  choice_id     Int?
+  text_answer   String?
+
+  is_correct    Boolean   @default(false) 
+  submitted_at  DateTime  @default(now())
+
+  question      Question  @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  choice        QuizChoice? @relation(fields: [choice_id], references: [id])
+  user          User      @relation(fields: [user_id], references: [id])
+
+  @@index([question_id])
+  @@index([user_id])
+  @@map("answer")
 }
 
 model UserProfessorSubject {
@@ -139,6 +179,7 @@ model Recording {
   ended_at      DateTime
   deleted_at    DateTime?
   audio_path    String
+  quiz          Quiz[]
   bookmarks     Bookmark[]
   highlights    Highlight[]
   memos         Memo[]
