@@ -28,8 +28,19 @@ export class QuestionLessThan10Error extends Error {
   }
 }
 
+export class JSONParsingError extends Error {
+  errorCode = "Q004";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   CreateQuestionError,
   NoSSTPathError,
   QuestionLessThan10Error,
+  JSONParsingError,
 };
