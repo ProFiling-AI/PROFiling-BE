@@ -44,15 +44,16 @@ model EmailVerification {
 }
 
 model Subject {
-  id               Int                    @id @default(autoincrement())
-  user_id          Int
-  subject_name     String
-  is_favorite      Boolean                @default(false)
-  created_at       DateTime               @default(now())
-  deleted_at       DateTime?
-  recordings       Recording[]
-  user             User                   @relation(fields: [user_id], references: [id])
-  created_subjects UserProfessorSubject[]
+  id                      Int                    @id @default(autoincrement())
+  user_id                 Int
+  userprofessorsubject_id Int?
+  subject_name            String
+  is_favorite             Boolean                @default(false)
+  created_at              DateTime               @default(now())
+  deleted_at              DateTime?
+  recordings              Recording[]
+  user                    User                   @relation(fields: [user_id], references: [id])
+  userProfessorSubject      UserProfessorSubject? @relation(fields: [userprofessorsubject_id], references: [id])
 }
 
 model Quiz {
@@ -118,16 +119,14 @@ model Answer {
 
 model UserProfessorSubject {
   id                  Int             @id @default(autoincrement())
-  subject_id          Int
   user_id             Int
   professor_course_id Int
   created_at          DateTime        @default(now())
   deleted_at          DateTime?
   professor_course    ProfessorCourse @relation(fields: [professor_course_id], references: [id])
-  subject             Subject         @relation(fields: [subject_id], references: [id])
   user                User            @relation(fields: [user_id], references: [id])
 
-  @@unique([user_id, subject_id])
+  subjects            Subject[]
 }
 
 model ProfessorCourse {
@@ -179,6 +178,7 @@ model Recording {
   ended_at      DateTime
   deleted_at    DateTime?
   audio_path    String
+  stt_path      String?
   quiz          Quiz[]
   bookmarks     Bookmark[]
   highlights    Highlight[]

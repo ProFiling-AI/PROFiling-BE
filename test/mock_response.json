@@ -1,0 +1,113 @@
+{
+  "id": "resp_01056ce8d3ef4823016924003347cc8196afcddade337c39c8",
+  "object": "response",
+  "created_at": 1763967027,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "\n        당신은 강의 전사본을 바탕으로 OX 퀴즈 10문항을 생성하는 조교입니다.\n        규칙:\n        - 모든 출력은 지정된 JSON 스키마만 따릅니다(추가 텍스트 금지).\n        - 한국어로 작성합니다.\n        - 각 문항은 강의/전사본의 핵심 사실을 검증하는 진술(stem) 형태로 만듭니다.\n        - explanation에는 왜 O 또는 X인지 간단히 근거를 씁니다(1~2문장).\n        - 항상 정확히 10문항, 각 score는 10점입 니다.\n        - 중복/동어반복 금지, 서로 다른 주제를 골고루 커버하세요.\n        ",
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "model": "gpt-5-nano-2025-08-07",
+  "output": [
+    {
+      "id": "rs_01056ce8d3ef48230169240033fbac819691a9a4e0bd2bb13e",
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "id": "msg_01056ce8d3ef4823016924005d1e288196946cbe1ad5eabd7f",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "{\"title\":\"고급 기계 9주차 OX퀴즈\",\"quiz_type\":\"OXQUIZ\",\"questions\":[{\"stem\":\"확률적 그래프 모델(PGM)은 확률  분포를 그림으로 표현해 직관적으로 이해하도록 돕는다.\",\"explanation\":\"그래프 표현은 변수 간 관계를 한눈에 파악하게 해준다.\",\"score\":10},{\"stem\":\"베이지안 네트워크는 방향성 그래프(DAG)로 구성되며, 엣지는 확률적 관계를 방향성을 가진 화살표로 표시한다.\",\"explanation\":\"화 살표의 방향성만으로 변수 간 의존성을 표현한다.\",\"score\":10},{\"stem\":\"PGM의 노드는 하나의 확률 변수(랜덤 변수)만을 나타낸다.\",\"explanation\":\"노드 각각이 하나의 변수에 대응한다.\",\"score\":10},{\"stem\":\"베이지안 네트워크의 조인트 확률은 P(A) P(B|A) P(C|A,B)처럼 조건부 분포의 곱으로 표현된다.\",\"explanation\":\"각 노드의 조건부 분포를 곱해 전체 분포를 얻는다.\",\"score\":10},{\"stem\":\"베이지안 네트워크는 Directed Acyclic Graph(순환이 없는 방향 그래프)로 구성된다.\",\"explanation\":\"순환이 없도록 제약 조건이 있다.\",\"score\":10},{\"stem\":\"플 레이트 표기법은 동일한 하위 구조를 여러 번 복제하는 것을 한 판으로 묶어 표현한다.\",\"explanation\":\"판에 반복되는 변수를 묶어서 표현의 복잡성을 줄인다.\",\"score\":10},{\"stem\":\"베이지안 회귀에서 목표는 가중치 W의 분포를 추정하는 것이다.\",\"explanation\":\"가중치의 불확실성을 반영하기 위해 분포를 다룬다.\",\"score\":10},{\"stem\":\"베이지안 회귀에서 알파는 모델 불확실성, 시그마^2는 관측 노이즈를 나타낸다.\",\"explanation\":\"두 불확실성의 원인에 따라 파라미터를 분리해 표현한다.\",\"score\":10},{\"stem\":\"D-분리(D-separation) 테스트는 조건부 독립성을 판단하기 위해 그래프의 경로를 분석한다.\",\"explanation\":\"경로가 차단되면 독립이 성립한다는 원리를 사용한다.\",\"score\":10},{\"stem\":\"마르코프 랜덤 필드(Markov Random Field)는 방향성이 없는 그래프이고 인퍼런스에 메시지 패싱 같은 알고리즘이 사용된다.\",\"explanation\":\"비방향 그래프의 인퍼런스에서도 유효한 방법들이 있다.\",\"score\":10}]}"
+        }
+      ],
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": null,
+  "reasoning": {
+    "effort": "medium",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "description": null,
+      "name": "ox_quiz_schema",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "quiz_type": {
+            "type": "string",
+            "enum": ["OX", "OXQUIZ"]
+          },
+          "questions": {
+            "type": "array",
+            "minItems": 10,
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "properties": {
+                "stem": {
+                  "type": "string"
+                },
+                "explanation": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "integer",
+                  "const": 10
+                }
+              },
+              "required": ["stem", "explanation", "score"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["title", "quiz_type", "questions"],
+        "additionalProperties": false
+      },
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "auto",
+  "tools": [],
+  "top_logprobs": 0,
+  "top_p": 1,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 18178,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 4623,
+    "output_tokens_details": {
+      "reasoning_tokens": 4032
+    },
+    "total_tokens": 22801
+  },
+  "user": null,
+  "metadata": {},
+  "output_text": "{\"title\":\"고급 기계 9주차 OX퀴즈\",\"quiz_type\":\"OXQUIZ\",\"questions\":[{\"stem\":\"확률적 그래프 모델(PGM)은 확률 분포를 그림으로 표현해 직관적으로 이해하도록 돕는다.\",\"explanation\":\"그래프 표현은 변수 간 관계를 한눈에 파악하게 해준다.\",\"score\":10},{\"stem\":\"베이지안 네트워크는 방향성 그래프(DAG)로 구성되며, 엣지는 확률적 관계를 방향성을 가진 화살표로 표시한다.\",\"explanation\":\"화살 표의 방향성만으로 변수 간 의존성을 표현한다.\",\"score\":10},{\"stem\":\"PGM의 노드는 하나의 확률 변수(랜덤 변수)만을 나타낸다.\",\"explanation\":\"노드 각각이 하나의 변수에 대응한다.\",\"score\":10},{\"stem\":\"베이지안 네트워크의 조인트 확률은 P(A) P(B|A) P(C|A,B)처럼 조건부 분포의 곱으로 표현된다.\",\"explanation\":\"각 노드의 조건부 분포를 곱해 전체 분포를 얻는다.\",\"score\":10},{\"stem\":\"베이지안 네트워크는 Directed Acyclic Graph(순환이 없는 방향 그래프)로 구성된다.\",\"explanation\":\"순환이 없도록 제약 조건이 있다.\",\"score\":10},{\"stem\":\"플레 이트 표기법은 동일한 하위 구조를 여러 번 복제하는 것을 한 판으로 묶어 표현한다.\",\"explanation\":\"판에 반복되는 변수를 묶어서 표현의 복잡성을 줄인다.\",\"score\":10},{\"stem\":\"베이지안 회귀에서 목표는 가중치 W의 분포를 추정하는 것이다.\",\"explanation\":\"가중치의 불확실성을 반영하기 위해 분포를 다룬다.\",\"score\":10},{\"stem\":\"베이지안 회귀에서 알파는 모델 불확실성, 시그마^2는 관측 노이즈를 나타낸다.\",\"explanation\":\"두 불확실성의 원인에 따라 파라미터를 분리해 표현한다.\",\"score\":10},{\"stem\":\"D-분리(D-separation) 테스트는 조건부 독립성을 판단하기 위해 그래프의 경로를 분석한다.\",\"explanation\":\"경로가 차단되면 독립이 성립한다는 원리를 사용한다.\",\"score\":10},{\"stem\":\"마르코프 랜덤 필드(Markov Random Field)는 방향성이 없는 그래프이고 인퍼런스에 메시지 패싱 같은 알고리즘이 사용된다.\",\"explanation\":\"비방향 그래프의 인퍼런스에서도 유효한 방법들이 있다.\",\"score\":10}]}"
+}
