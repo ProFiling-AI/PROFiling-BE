@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import authRoutes from "./routes/auth.route.js";
 import professorRoutes from "./routes/professor.route.js";
 import subjectRoutes from "./routes/subject.route.js";
-import quizRoutes from "./routes/quiz.route.js";
+//import quizRoutes from "./routes/quiz.route.js";
 import morganMiddleware from "./middlewares/morganMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
 import logger from "./logger.js";
@@ -12,6 +13,12 @@ import connectMongo from "./mongo.config.js";
 
 dotenv.config();
 const app = express();
+
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 // ✅ 공통 응답 헬퍼 미들웨어를 가장 먼저 등록
 app.use((req, res, next) => {
@@ -40,7 +47,7 @@ app.use(express.json());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/professors", professorRoutes);
 app.use("/api/v1/subject", subjectRoutes);
-app.use("/api/v1/quiz", quizRoutes);
+//app.use("/api/v1/quiz", quizRoutes);
 
 // ✅ 마지막으로 전역 오류 처리 미들웨어를 추가
 app.use((err, req, res, next) => {
