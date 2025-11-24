@@ -21,8 +21,12 @@ const OX_JSON_SCHEMA = {
           stem: { type: "string" },
           explanation: { type: "string" },
           score: { type: "integer", const: 10 },
+          answer: {
+            type: "string",
+            enum: ["O", "X"],
+          },
         },
-        required: ["stem", "explanation", "score"],
+        required: ["stem", "explanation", "score", "answer"],
         additionalProperties: false,
       },
     },
@@ -57,6 +61,7 @@ const generateQuizByAI = async (user_id, recording_id, quiz_type, title) => {
         - 한국어로 작성합니다.
         - 각 문항은 강의/전사본의 핵심 사실을 검증하는 진술(stem) 형태로 만듭니다.
         - explanation에는 왜 O 또는 X인지 간단히 근거를 씁니다(1~2문장).
+        - 각 문항에는 정답 answer 필드를 포함합니다. ("O" 또는 "X")
         - 항상 정확히 10문항, 각 score는 10점입니다.
         - 중복/동어반복 금지, 서로 다른 주제를 골고루 커버하세요.
         `;
@@ -141,11 +146,13 @@ const generateQuizByAI = async (user_id, recording_id, quiz_type, title) => {
           explanation: q.explanation,
           score: q.score ?? 10,
           blank_answer: null,
+          isCorrectO: q.answer === "O",
         })),
       });
 
     return quizDto.resultQuizDto(quiz, saved_questions, desired_quiz_type_out);
   } catch (error) {
+    console.log(error);
     throw new quizError.CreateQuestionError("Error on creating quiz");
   }
 };
