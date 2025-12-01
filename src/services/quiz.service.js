@@ -139,7 +139,7 @@ const generateQuizByAI = async (user_id, recording_id, quiz_type, title) => {
       await quizRepository.createQuizWithQuestionsRepo({
         user_id,
         recording_id,
-        quiz_type: quiz_type_for_db, // 예: "OXQUIZ"
+        quiz_type: quiz_type_for_db, // "OXQUIZ"
         title: parsed?.title || title,
         questions: ai_questions.map((q) => ({
           stem: q.stem,
@@ -152,7 +152,6 @@ const generateQuizByAI = async (user_id, recording_id, quiz_type, title) => {
 
     return quizDto.resultQuizDto(quiz, saved_questions, desired_quiz_type_out);
   } catch (error) {
-    console.log(error);
     throw new quizError.CreateQuestionError("Error on creating quiz");
   }
 };
