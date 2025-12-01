@@ -4,20 +4,17 @@ import crypto from "crypto";
 import authRepository from "../repositories/auth.repository.js";
 import authError from "../errors/auth.error.js";
 import sendmail from "../utils/sendmail.util.js";
-import { prisma } from "../db.config.js";
 
 const register = async (signup_data) => {
   // 인증 코드 확인
-  const verification = await prisma.emailVerification.findUnique({
-    where: { email },
-  });
+  const verification = await authRepository.findEmailVerification(
+    signup_data.email
+  );
   if (!verification || verification.code !== code) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "인증 코드가 틀렸습니다." });
+    throw new authError.InvalidVerificationCodeError("인증 코드가 틀렸습니다.");
   }
 
-  const existing_user = await authRepository.findByEmail(signup_data.email);
+  const existing_user = await authRepository.findUserByEmail(signup_data.email);
   if (existing_user) {
     throw new authError.UserAlreadyExistsError("Email already registered");
   }
@@ -33,7 +30,7 @@ const register = async (signup_data) => {
   });
 
   // 인증 기록 삭제
-  await prisma.emailVerification.delete({ where: { email } });
+  await authRepository.deleteEmailVerification(signup_data.email);
 
   return {
     email: new_user.email,
