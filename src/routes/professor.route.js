@@ -28,5 +28,10 @@ router.get(
 );
 router.get("/search", professorController.getProfessorSearch);
 router.delete("/delete", authMiddleware, professorController.deleteProfessorMy);
+router.post(
+  "/my/list/:professor_course_id",
+  authMiddleware,
+  professorController.postProfessorMy
+);
 
 export default router;
