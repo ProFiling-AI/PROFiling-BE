@@ -78,6 +78,16 @@ export class AddFavoriteSubjectError extends Error {
   }
 }
 
+export class AddMyProfessorError extends Error {
+  errorCode = "S009";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   SubjectAlreadyExistError,
   SubjectNotExistError,
@@ -87,4 +97,5 @@ export default {
   ModifySubjectError,
   RestoreSubjectError,
   AddFavoriteSubjectError,
+  AddMyProfessorError,
 };

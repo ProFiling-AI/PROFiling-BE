@@ -50,6 +50,20 @@ const addFavoriteSubjectById = async (user_id, subject_id, is_favorite) => {
   return subject;
 };
 
+const addMyProfessorById = async (
+  user_id,
+  subject_id,
+  userprofessorsubject_id
+) => {
+  const updatedSubject = await subjectRepository.addMyProfessor(
+    user_id,
+    subject_id,
+    userprofessorsubject_id
+  );
+
+  return updatedSubject;
+};
+
 export default {
   getSubjectListById,
   createSubjectById,
@@ -57,4 +71,5 @@ export default {
   renameSubjectById,
   restoreSubjectById,
   addFavoriteSubjectById,
+  addMyProfessorById,
 };

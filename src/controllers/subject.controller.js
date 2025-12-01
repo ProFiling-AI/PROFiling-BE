@@ -83,6 +83,24 @@ const addFavoriteSubject = async (req, res, next) => {
   }
 };
 
+const addMyprofessor = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const subject_id = Number(req.params.subject_id);
+    const { userprofessorsubject_id } = req.body;
+
+    const updated_subject = await subjectService.addMyProfessorById(
+      user_id,
+      subject_id,
+      userprofessorsubject_id
+    );
+
+    return res.success(updated_subject, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getMySubjectList,
   createMySubject,
@@ -90,4 +108,5 @@ export default {
   renameMySubject,
   restoreMySubject,
   addFavoriteSubject,
+  addMyprofessor,
 };
