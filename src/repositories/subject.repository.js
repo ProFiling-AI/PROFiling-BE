@@ -197,6 +197,74 @@ const favoriteSubject = async (user_id, subject_id, is_favorite) => {
   }
 };
 
+const addMyProfessor = async (user_id, subject_id, userprofessorsubject_id) => {
+  try {
+    const subject = await prisma.subject.findUnique({
+      where: { id: subject_id },
+      select: {
+        id: true,
+        user_id: true,
+      },
+    });
+
+    if (!subject) {
+      throw new subjectError.SubjectNotFoundError(
+        "해당 과목을 찾을 수 없습니다.",
+        { subject_id }
+      );
+    }
+
+    if (subject.user_id !== user_id) {
+      throw new subjectError.SubjectForbiddenError(
+        "해당 과목에 접근할 권한이 없습니다.",
+        { user_id, subject_id }
+      );
+    }
+
+    const myProfessor = await prisma.userProfessorSubject.findUnique({
+      where: { id: userprofessorsubject_id },
+      select: {
+        id: true,
+        user_id: true,
+      },
+    });
+
+    if (!myProfessor) {
+      throw new subjectError.UserProfessorNotFoundError(
+        "해당 교수 리스트를 찾을 수 없습니다.",
+        { userprofessorsubject_id }
+      );
+    }
+
+    if (myProfessor.user_id !== user_id) {
+      throw new subjectError.UserProfessorForbiddenError(
+        "해당 교수는 사용자의 교수 리스트가 아닙니다.",
+        { user_id, userprofessorsubject_id }
+      );
+    }
+
+    const updatedSubject = await prisma.subject.update({
+      where: { id: subject_id },
+      data: {
+        userprofessorsubject_id: userprofessorsubject_id,
+      },
+      select: {
+        id: true,
+        userprofessorsubject_id: true,
+      },
+    });
+
+    return updatedSubject;
+  } catch (error) {
+    if (error instanceof subjectError.SubjectNotExistError) {
+      throw error;
+    }
+    throw new subjectError.AddMyProfessorError(
+      "Error on adding professor to subject"
+    );
+  }
+};
+
 export default {
   getSubjectList,
   createSubject,
@@ -204,4 +272,5 @@ export default {
   renameSubject,
   restoreSubject,
   favoriteSubject,
+  addMyProfessor,
 };

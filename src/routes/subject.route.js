@@ -19,5 +19,10 @@ router.patch(
   authMiddleware,
   subjectController.addFavoriteSubject
 );
+router.patch(
+  "/:subject_id/professor",
+  authMiddleware,
+  subjectController.addMyprofessor
+);
 
 export default router;
