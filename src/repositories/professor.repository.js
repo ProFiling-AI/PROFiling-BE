@@ -214,6 +214,32 @@ const deleteProfessorMy = async (user_id, professor_course_ids) => {
   }
 };
 
+const insertProfessorMy = async (user_id, professor_course_id) => {
+  try {
+    return await prisma.userProfessorSubject.create({
+      data: {
+        user: { connect: { id: user_id } },
+        professor_course: { connect: { id: Number(professor_course_id) } },
+      },
+      select: {
+        id: true,
+        professor_course_id: true,
+        professor_course: {
+          select: {
+            id: true,
+            subject_name: true,
+            school: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    throw new professorError.InsertProfessorMyError(
+      "Error on inserting professor into my list"
+    );
+  }
+};
+
 export default {
   findProfessor,
   findProfessorMy,
@@ -223,4 +249,5 @@ export default {
   findProfessorExam,
   searchProfessor,
   deleteProfessorMy,
+  insertProfessorMy,
 };

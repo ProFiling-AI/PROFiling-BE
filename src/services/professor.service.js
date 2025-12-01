@@ -63,6 +63,15 @@ const deleteProfessorMy = async (user_id, professor_course_id) => {
   return professorDTO.professorMyDeleteDto(delete_professor);
 };
 
+const postProfessorMy = async (user_id, professor_course_id) => {
+  const new_professor = await professorRepository.insertProfessorMy(
+    user_id,
+    professor_course_id
+  );
+  const professor_my_dto = professorDTO.professorMyPostDto(new_professor);
+  return professor_my_dto;
+};
+
 export default {
   getProfessorList,
   getProfessorMy,
@@ -72,4 +81,5 @@ export default {
   getProfessorExam,
   getProfessorSearch,
   deleteProfessorMy,
+  postProfessorMy,
 };

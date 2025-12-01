@@ -49,6 +49,11 @@ const professorMyDeleteDto = (list) => {
   }));
 };
 
+const professorMyPostDto = (item) => ({
+  professor_course_id: item.professor_course_id,
+  id: item.id,
+});
+
 export default {
   professorListDto,
   professorMyListDto,
@@ -56,4 +61,5 @@ export default {
   professorExamDto,
   professorSearchDto,
   professorMyDeleteDto,
+  professorMyPostDto,
 };

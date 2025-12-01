@@ -46,7 +46,7 @@ model EmailVerification {
 model Subject {
   id                      Int                    @id @default(autoincrement())
   user_id                 Int
-  userprofessorsubject_id Int?
+  userprofessorsubject_id Int?                   @unique
   subject_name            String
   is_favorite             Boolean                @default(false)
   created_at              DateTime               @default(now())
@@ -126,7 +126,7 @@ model UserProfessorSubject {
   professor_course    ProfessorCourse @relation(fields: [professor_course_id], references: [id])
   user                User            @relation(fields: [user_id], references: [id])
 
-  subjects            Subject[]
+  subjects            Subject?
 }
 
 model ProfessorCourse {
