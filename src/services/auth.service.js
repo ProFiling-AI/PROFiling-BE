@@ -10,7 +10,7 @@ const register = async (signup_data) => {
   const verification = await authRepository.findEmailVerification(
     signup_data.email
   );
-  if (!verification || verification.code !== code) {
+  if (!verification) {
     throw new authError.InvalidVerificationCodeError("인증 코드가 틀렸습니다.");
   }
 
