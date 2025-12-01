@@ -4,6 +4,7 @@ import crypto from "crypto";
 import authRepository from "../repositories/auth.repository.js";
 import authError from "../errors/auth.error.js";
 import sendmail from "../utils/sendmail.util.js";
+import { prisma } from "../db.config.js";
 
 const register = async (signup_data) => {
   // 인증 코드 확인
