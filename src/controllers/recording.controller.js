@@ -16,6 +16,24 @@ const getRecordingList = async (req, res, next) => {
   }
 };
 
+const addBookmark = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = req.params.recording_id;
+    const timestamp = req.body.timestamp;
+
+    const bookmark = await recordingService.addBookmarkById(
+      user_id,
+      recording_id,
+      timestamp
+    );
+    return res.success(bookmark, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
+  addBookmark,
 };

@@ -10,6 +10,17 @@ const getRecordingListById = async (user_id, subject_id) => {
   return recording_list;
 };
 
+const addBookmarkById = async (user_id, recording_id, timestamp) => {
+  const bookmarks = await recordingRepository.addBookmark(
+    user_id,
+    recording_id,
+    timestamp
+  );
+  const bookmark_list = recordingDto.bookmarkAddDto(bookmarks);
+  return bookmark_list;
+};
+
 export default {
   getRecordingListById,
+  addBookmarkById,
 };
