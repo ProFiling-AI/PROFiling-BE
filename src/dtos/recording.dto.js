@@ -7,6 +7,18 @@ const recordingListDto = (user_id, list = []) => {
   }));
 };
 
+const bookmarkAddDto = (bookmark) => {
+  return [
+    {
+      bookmark_id: bookmark.id,
+      recording_id: bookmark.recording_id,
+      timestamp: bookmark.timestamp,
+      created_at: bookmark.created_at,
+    },
+  ];
+};
+
 export default {
   recordingListDto,
+  bookmarkAddDto,
 };
