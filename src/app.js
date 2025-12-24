@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.route.js";
 import professorRoutes from "./routes/professor.route.js";
 import subjectRoutes from "./routes/subject.route.js";
 import quizRoutes from "./routes/quiz.route.js";
+import recordingRoutes from "./routes/recording.route.js";
 import morganMiddleware from "./middlewares/morganMiddleware.js";
 import authMiddleware from "./middlewares/authMiddleware.js";
 import logger from "./logger.js";
@@ -48,6 +49,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/professors", professorRoutes);
 app.use("/api/v1/subject", subjectRoutes);
 app.use("/api/v1/quiz", quizRoutes);
+app.use("/api/v1/recording", recordingRoutes);
 
 // ✅ 마지막으로 전역 오류 처리 미들웨어를 추가
 app.use((err, req, res, next) => {
