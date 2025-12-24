@@ -67,7 +67,51 @@ const addBookmark = async (user_id, recording_id, timestamp) => {
   }
 };
 
+const deleteBookmark = async (user_id, recording_id, bookmark_id) => {
+  try {
+    // 1) 북마크 존재 + 권한 확인
+    const bookmark = await prisma.bookmark.findFirst({
+      where: {
+        id: Number(bookmark_id),
+        recording_id: Number(recording_id),
+        recording: {
+          subject: {
+            user_id: user_id,
+          },
+        },
+      },
+      select: {
+        id: true,
+        recording_id: true,
+      },
+    });
+
+    if (!bookmark) {
+      throw new recordingError.BookmarkNotFoundError(
+        "북마크를 찾을 수 없습니다."
+      );
+    }
+
+    // 2) 하드 삭제
+    await prisma.bookmark.delete({
+      where: { id: Number(bookmark_id) },
+    });
+
+    // 3) 응답용 데이터 리턴
+    return {
+      id: bookmark.id,
+      recording_id: bookmark.recording_id,
+    };
+  } catch (error) {
+    if (error instanceof recordingError.BookmarkNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.BookmarkDeleteError("Error on deleting bookmark");
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
+  deleteBookmark,
 };

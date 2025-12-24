@@ -20,7 +20,18 @@ const addBookmarkById = async (user_id, recording_id, timestamp) => {
   return bookmark_list;
 };
 
+const deleteBookmarkById = async (user_id, recording_id, bookmark_id) => {
+  const bookmark = await recordingRepository.deleteBookmark(
+    user_id,
+    recording_id,
+    bookmark_id
+  );
+  const result = recordingDto.bookmarkDeleteDto(bookmark);
+  return result;
+};
+
 export default {
   getRecordingListById,
   addBookmarkById,
+  deleteBookmarkById,
 };

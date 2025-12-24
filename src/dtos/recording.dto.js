@@ -18,7 +18,16 @@ const bookmarkAddDto = (bookmark) => {
   ];
 };
 
+const bookmarkDeleteDto = (bookmark) => {
+  return {
+    message: "북마크가 삭제되었습니다.",
+    bookmark_id: bookmark.id,
+    recording_id: bookmark.recording_id,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
+  bookmarkDeleteDto,
 };
