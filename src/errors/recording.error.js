@@ -48,10 +48,21 @@ export class BookmarkDeleteError extends Error {
   }
 }
 
+export class BookmarkListError extends Error {
+  errorCode = "R006";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
   RecordingNotFoundError,
   BookmarkNotFoundError,
   BookmarkDeleteError,
+  BookmarkListError,
 };

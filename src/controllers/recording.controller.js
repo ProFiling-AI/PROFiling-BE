@@ -51,8 +51,24 @@ const deleteBookmark = async (req, res, next) => {
   }
 };
 
+const getBookmarkList = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = Number(req.params.recording_id);
+
+    const bookmarks = await recordingService.getBookmarkListById(
+      user_id,
+      recording_id
+    );
+    return res.success(bookmarks, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
   deleteBookmark,
+  getBookmarkList,
 };
