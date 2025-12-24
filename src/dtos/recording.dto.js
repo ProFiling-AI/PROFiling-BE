@@ -26,8 +26,18 @@ const bookmarkDeleteDto = (bookmark) => {
   };
 };
 
+const bookmarkListDto = (list = []) => {
+  return list.map((bookmark) => ({
+    bookmark_id: bookmark.id,
+    recording_id: bookmark.recording_id,
+    timestamp: bookmark.timestamp,
+    created_at: bookmark.created_at,
+  }));
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
   bookmarkDeleteDto,
+  bookmarkListDto,
 };

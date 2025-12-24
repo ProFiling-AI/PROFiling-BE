@@ -110,8 +110,49 @@ const deleteBookmark = async (user_id, recording_id, bookmark_id) => {
   }
 };
 
+const getBookmarkList = async (user_id, recording_id) => {
+  try {
+    const recording = await prisma.recording.findFirst({
+      where: {
+        id: Number(recording_id),
+        subject: {
+          user_id: user_id,
+        },
+      },
+      select: { id: true },
+    });
+
+    if (!recording) {
+      throw new recordingError.RecordingNotFoundError(
+        "녹음 파일을 찾을 수 없습니다."
+      );
+    }
+
+    return await prisma.bookmark.findMany({
+      where: {
+        recording_id: Number(recording_id),
+      },
+      orderBy: [{ timestamp: "asc" }, { id: "asc" }], // ✅ 재생 위치 순 추천
+      select: {
+        id: true,
+        recording_id: true,
+        timestamp: true,
+        created_at: true,
+      },
+    });
+  } catch (error) {
+    if (error instanceof recordingError.RecordingNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.BookmarkListError(
+      "Error on finding bookmark list"
+    );
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
   deleteBookmark,
+  getBookmarkList,
 };
