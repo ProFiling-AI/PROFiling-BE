@@ -28,8 +28,30 @@ export class RecordingNotFoundError extends Error {
   }
 }
 
+export class BookmarkNotFoundError extends Error {
+  errorCode = "R004";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class BookmarkDeleteError extends Error {
+  errorCode = "R005";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
   RecordingNotFoundError,
+  BookmarkNotFoundError,
+  BookmarkDeleteError,
 };

@@ -10,5 +10,10 @@ router.post(
   authMiddleware,
   recordingController.addBookmark
 );
+router.delete(
+  "/:recording_id/bookmarks/:bookmark_id",
+  authMiddleware,
+  recordingController.deleteBookmark
+);
 
 export default router;
