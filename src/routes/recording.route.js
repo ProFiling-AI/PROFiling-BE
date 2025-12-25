@@ -20,5 +20,10 @@ router.get(
   authMiddleware,
   recordingController.getBookmarkList
 );
+router.get(
+  "/:recording_id/memo/list",
+  authMiddleware,
+  recordingController.getMemoList
+);
 
 export default router;

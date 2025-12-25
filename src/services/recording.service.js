@@ -39,9 +39,16 @@ const getBookmarkListById = async (user_id, recording_id) => {
   return bookmarks_list;
 };
 
+const getMemoListById = async (user_id, recording_id) => {
+  const memos = await recordingRepository.getMemoList(user_id, recording_id);
+  const memo_list = recordingDto.memoListDto(memos);
+  return memo_list;
+};
+
 export default {
   getRecordingListById,
   addBookmarkById,
   deleteBookmarkById,
   getBookmarkListById,
+  getMemoListById,
 };

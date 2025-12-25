@@ -150,9 +150,47 @@ const getBookmarkList = async (user_id, recording_id) => {
   }
 };
 
+const getMemoList = async (user_id, recording_id) => {
+  try {
+    const recording = await prisma.recording.findFirst({
+      where: {
+        id: Number(recording_id),
+        subject: {
+          user_id: user_id,
+        },
+      },
+      select: { id: true },
+    });
+
+    if (!recording) {
+      throw new recordingError.RecordingNotFoundError(
+        "녹음 파일을 찾을 수 없습니다."
+      );
+    }
+
+    return await prisma.memo.findMany({
+      where: {
+        recording_id: Number(recording_id),
+      },
+      select: {
+        id: true,
+        recording_id: true,
+        title: true,
+        content: true,
+      },
+    });
+  } catch (error) {
+    if (error instanceof recordingError.RecordingNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.MemoListError("Error on finding memo list");
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
   deleteBookmark,
   getBookmarkList,
+  getMemoList,
 };
