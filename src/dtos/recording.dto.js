@@ -35,9 +35,19 @@ const bookmarkListDto = (list = []) => {
   }));
 };
 
+const memoListDto = (list = []) => {
+  return list.map((memo) => ({
+    memo_id: memo.id,
+    recording_id: memo.recording_id,
+    title: memo.title,
+    content: memo.content,
+  }));
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
   bookmarkDeleteDto,
   bookmarkListDto,
+  memoListDto,
 };
