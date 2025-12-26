@@ -187,10 +187,47 @@ const getMemoList = async (user_id, recording_id) => {
   }
 };
 
+const addMemo = async (user_id, recording_id, title, content) => {
+  try {
+    const recording = await prisma.recording.findFirst({
+      where: {
+        id: Number(recording_id),
+        subject: {
+          user_id: user_id,
+        },
+      },
+      select: { id: true },
+    });
+
+    if (!recording) {
+      throw new recordingError.RecordingNotFoundError(
+        "녹음 파일을 찾을 수 없습니다."
+      );
+    }
+
+    const memo = await prisma.memo.create({
+      data: {
+        recording_id: Number(recording_id),
+        title: title,
+        content: content,
+      },
+    });
+    return memo;
+  } catch (error) {
+    if (error instanceof recordingError.RecordingNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.MemoCreateError(
+      "메모 생성 중 오류가 발생했습니다."
+    );
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
   deleteBookmark,
   getBookmarkList,
   getMemoList,
+  addMemo,
 };

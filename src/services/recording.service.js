@@ -45,10 +45,22 @@ const getMemoListById = async (user_id, recording_id) => {
   return memo_list;
 };
 
+const addMemoById = async (user_id, recording_id, title, content) => {
+  const memo = await recordingRepository.addMemo(
+    user_id,
+    recording_id,
+    title,
+    content
+  );
+  const add_memo_list = recordingDto.addMemoDto(memo);
+  return add_memo_list;
+};
+
 export default {
   getRecordingListById,
   addBookmarkById,
   deleteBookmarkById,
   getBookmarkListById,
   getMemoListById,
+  addMemoById,
 };
