@@ -68,6 +68,16 @@ export class MemoListError extends Error {
   }
 }
 
+export class MemoCreateError extends Error {
+  errorCode = "R008";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
@@ -76,4 +86,5 @@ export default {
   BookmarkDeleteError,
   BookmarkListError,
   MemoListError,
+  MemoCreateError,
 };

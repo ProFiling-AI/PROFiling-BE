@@ -77,10 +77,28 @@ const getMemoList = async (req, res, next) => {
   }
 };
 
+const addMemo = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = Number(req.params.recording_id);
+    const { title, content } = req.body;
+    const memo = await recordingService.addMemoById(
+      user_id,
+      recording_id,
+      title,
+      content
+    );
+    return res.success(memo, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
   deleteBookmark,
   getBookmarkList,
   getMemoList,
+  addMemo,
 };

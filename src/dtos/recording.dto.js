@@ -44,10 +44,21 @@ const memoListDto = (list = []) => {
   }));
 };
 
+const addMemoDto = (memo) => {
+  return {
+    memo_id: memo.id,
+    recording_id: memo.recording_id,
+    title: memo.title,
+    content: memo.content,
+    created_at: memo.created_at,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
   bookmarkDeleteDto,
   bookmarkListDto,
   memoListDto,
+  addMemoDto,
 };

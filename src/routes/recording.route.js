@@ -25,5 +25,10 @@ router.get(
   authMiddleware,
   recordingController.getMemoList
 );
+router.post(
+  "/:recording_id/memos",
+  authMiddleware,
+  recordingController.addMemo
+);
 
 export default router;
