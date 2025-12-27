@@ -56,6 +56,16 @@ const addMemoById = async (user_id, recording_id, title, content) => {
   return add_memo_list;
 };
 
+const deleteOneMemoById = async (user_id, recording_id, memo_id) => {
+  const onememo = await recordingRepository.deleteOneMemo(
+    user_id,
+    recording_id,
+    memo_id
+  );
+  const delete_memo = recordingDto.deleteOneMemoDto(onememo);
+  return delete_memo;
+};
+
 export default {
   getRecordingListById,
   addBookmarkById,
@@ -63,4 +73,5 @@ export default {
   getBookmarkListById,
   getMemoListById,
   addMemoById,
+  deleteOneMemoById,
 };

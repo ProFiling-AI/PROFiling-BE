@@ -223,6 +223,78 @@ const addMemo = async (user_id, recording_id, title, content) => {
   }
 };
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const deleteOneMemo = async (user_id, recording_id, memo_id) => {
+  const rid = Number(recording_id);
+  const mid = Number(memo_id);
+  const now = dayjs().tz("Asia/Seoul").toDate();
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const recording = await tx.recording.findFirst({
+        where: {
+          id: rid,
+          subject: {
+            user_id: user_id,
+          },
+        },
+        select: { id: true },
+      });
+
+      if (!recording) {
+        throw new recordingError.RecordingNotFoundError(
+          "녹음 파일을 찾을 수 없습니다."
+        );
+      }
+
+      const memo = await tx.memo.findFirst({
+        where: {
+          id: mid,
+          recording_id: rid,
+        },
+        select: {
+          id: true,
+          recording_id: true,
+          deleted_at: true,
+        },
+      });
+
+      if (!memo) {
+        throw new recordingError.MemoNotFoundError("메모를 찾을 수 없습니다.");
+      }
+
+      if (memo.deleted_at) {
+        throw new recordingError.MemoAlreadyDeletedError(
+          "이미 삭제된 메모입니다."
+        );
+      }
+
+      // 4️⃣ soft delete
+      const deletedMemo = await tx.memo.update({
+        where: { id: mid },
+        data: { deleted_at: now },
+        select: {
+          id: true,
+          recording_id: true,
+        },
+      });
+
+      return deletedMemo;
+    });
+  } catch (error) {
+    if (
+      error instanceof recordingError.RecordingNotFoundError ||
+      error instanceof recordingError.MemoNotFoundError ||
+      error instanceof recordingError.MemoAlreadyDeletedError
+    ) {
+      throw error;
+    }
+    throw new recordingError.DeleteMemoError("Error on deleting memo");
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -230,4 +302,5 @@ export default {
   getBookmarkList,
   getMemoList,
   addMemo,
+  deleteOneMemo,
 };

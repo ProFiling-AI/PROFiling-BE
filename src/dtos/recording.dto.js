@@ -54,6 +54,14 @@ const addMemoDto = (memo) => {
   };
 };
 
+const deleteOneMemoDto = (memo) => {
+  return {
+    message: "메모가 삭제되었습니다.",
+    memo_id: memo.id,
+    recording_id: memo.recording_id,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
@@ -61,4 +69,5 @@ export default {
   bookmarkListDto,
   memoListDto,
   addMemoDto,
+  deleteOneMemoDto,
 };
