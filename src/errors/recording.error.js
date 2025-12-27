@@ -78,6 +78,36 @@ export class MemoCreateError extends Error {
   }
 }
 
+export class MemoNotFoundError extends Error {
+  errorCode = "R009";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class MemoAlreadyDeletedError extends Error {
+  errorCode = "R010";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class DeleteMemoError extends Error {
+  errorCode = "R011";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
@@ -87,4 +117,7 @@ export default {
   BookmarkListError,
   MemoListError,
   MemoCreateError,
+  MemoNotFoundError,
+  MemoAlreadyDeletedError,
+  DeleteMemoError,
 };

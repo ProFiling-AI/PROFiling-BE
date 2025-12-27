@@ -94,6 +94,22 @@ const addMemo = async (req, res, next) => {
   }
 };
 
+const deleteOneMemo = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = req.params.recording_id;
+    const memo_id = req.params.memo_id;
+    const onememo = await recordingService.deleteOneMemoById(
+      user_id,
+      recording_id,
+      memo_id
+    );
+    return res.success(onememo, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -101,4 +117,5 @@ export default {
   getBookmarkList,
   getMemoList,
   addMemo,
+  deleteOneMemo,
 };

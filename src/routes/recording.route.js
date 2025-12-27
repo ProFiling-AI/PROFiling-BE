@@ -30,5 +30,10 @@ router.post(
   authMiddleware,
   recordingController.addMemo
 );
+router.delete(
+  "/:recording_id/memos/:memo_id/delete",
+  authMiddleware,
+  recordingController.deleteOneMemo
+);
 
 export default router;
