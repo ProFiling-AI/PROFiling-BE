@@ -346,6 +346,35 @@ const renameMemo = async (user_id, recording_id, memo_id, title, content) => {
   }
 };
 
+const renameRecording = async (user_id, recording_id, title) => {
+  try {
+    const existing = await prisma.recording.findFirst({
+      where: { id: recording_id, user_id },
+    });
+
+    if (!existing) {
+      throw new recordingError.RecordingNotFoundError(
+        "해당 녹음파일을 찾을 수 없습니다."
+      );
+    }
+
+    const updated = await prisma.recording.update({
+      where: { id: recording_id },
+      data: { title },
+      select: { id: true, title: true },
+    });
+
+    return updated;
+  } catch (error) {
+    if (error instanceof recordingError.RecordingNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.ModifyRecordingError(
+      "Error on renaming recording"
+    );
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -355,4 +384,5 @@ export default {
   addMemo,
   deleteOneMemo,
   renameMemo,
+  renameRecording,
 };
