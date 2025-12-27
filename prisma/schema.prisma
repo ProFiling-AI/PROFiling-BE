@@ -203,7 +203,7 @@ model Memo {
   title        String    @default("제목을 입력하세요")
   content      String
   created_at   DateTime  @default(now())
-  updated_at   DateTime?
+  updated_at   DateTime? @updatedAt
   deleted_at   DateTime?
   recording    Recording @relation(fields: [recording_id], references: [id])
 }

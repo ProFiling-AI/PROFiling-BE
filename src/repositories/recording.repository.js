@@ -295,6 +295,57 @@ const deleteOneMemo = async (user_id, recording_id, memo_id) => {
   }
 };
 
+const renameMemo = async (user_id, recording_id, memo_id, title, content) => {
+  try {
+    const normalizedTitle =
+      typeof title === "string" && title.trim() !== ""
+        ? title.trim()
+        : undefined;
+    const normalizedContent =
+      typeof content === "string" && content.trim() !== ""
+        ? content
+        : undefined;
+
+    const memo = await prisma.memo.findFirst({
+      where: {
+        id: Number(memo_id),
+        recording_id: Number(recording_id),
+        recording: {
+          subject: {
+            user_id: user_id,
+          },
+        },
+      },
+      select: { id: true },
+    });
+    if (!memo) {
+      throw new recordingError.MemoNotFoundError("메모를 찾을 수 없습니다.");
+    }
+
+    const data = {
+      ...(normalizedTitle !== undefined && { title: normalizedTitle }),
+      ...(normalizedContent !== undefined && { content: normalizedContent }),
+    };
+
+    return await prisma.memo.update({
+      where: { id: memo_id },
+      data,
+      select: {
+        id: true,
+        recording_id: true,
+        title: true,
+        content: true,
+        updated_at: true,
+      },
+    });
+  } catch (error) {
+    if (error instanceof recordingError.MemoNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.RenameMemoError("Error on renaming memo");
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -303,4 +354,5 @@ export default {
   getMemoList,
   addMemo,
   deleteOneMemo,
+  renameMemo,
 };
