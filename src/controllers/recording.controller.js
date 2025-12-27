@@ -130,6 +130,23 @@ const renameMemo = async (req, res, next) => {
   }
 };
 
+const renameRecording = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = Number(req.params.recording_id);
+    const { title } = req.body;
+
+    const recording = await recordingService.renameRecordingById(
+      user_id,
+      recording_id,
+      title
+    );
+    return res.success(recording, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -139,4 +156,5 @@ export default {
   addMemo,
   deleteOneMemo,
   renameMemo,
+  renameRecording,
 };

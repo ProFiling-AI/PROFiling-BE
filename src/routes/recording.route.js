@@ -40,5 +40,10 @@ router.patch(
   authMiddleware,
   recordingController.renameMemo
 );
+router.patch(
+  "/:recording_id/rename",
+  authMiddleware,
+  recordingController.renameRecording
+);
 
 export default router;

@@ -72,6 +72,14 @@ const renameMemoDto = (memo) => {
   };
 };
 
+const renameRecordingDto = (recording) => {
+  return {
+    message: "녹음파일 제목이 수정되었습니다.",
+    recording_id: recording.recording_id,
+    title: recording.title,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
@@ -81,4 +89,5 @@ export default {
   addMemoDto,
   deleteOneMemoDto,
   renameMemoDto,
+  renameRecordingDto,
 };
