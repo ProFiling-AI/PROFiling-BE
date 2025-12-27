@@ -35,5 +35,10 @@ router.delete(
   authMiddleware,
   recordingController.deleteOneMemo
 );
+router.patch(
+  "/:recording_id/memos/:memo_id/rename",
+  authMiddleware,
+  recordingController.renameMemo
+);
 
 export default router;

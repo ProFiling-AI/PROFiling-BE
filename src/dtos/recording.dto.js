@@ -62,6 +62,16 @@ const deleteOneMemoDto = (memo) => {
   };
 };
 
+const renameMemoDto = (memo) => {
+  return {
+    message: "메모가 수정되었습니다.",
+    memo_id: memo.id,
+    recording_id: memo.recording_id,
+    title: memo.title,
+    content: memo.content,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
@@ -70,4 +80,5 @@ export default {
   memoListDto,
   addMemoDto,
   deleteOneMemoDto,
+  renameMemoDto,
 };

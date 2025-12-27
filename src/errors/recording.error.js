@@ -108,6 +108,16 @@ export class DeleteMemoError extends Error {
   }
 }
 
+export class RenameMemoError extends Error {
+  errorCode = "R012";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
@@ -120,4 +130,5 @@ export default {
   MemoNotFoundError,
   MemoAlreadyDeletedError,
   DeleteMemoError,
+  RenameMemoError,
 };
