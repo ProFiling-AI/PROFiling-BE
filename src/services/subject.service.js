@@ -64,6 +64,16 @@ const addMyProfessorById = async (
   return updatedSubject;
 };
 
+const searchRecordingByKeyword = async (user_id, subject_id, keyword) => {
+  const recording = await subjectRepository.searchRecording(
+    user_id,
+    subject_id,
+    keyword
+  );
+  const search_recording = subjectDto.searchRecordingDto(recording);
+  return search_recording;
+};
+
 export default {
   getSubjectListById,
   createSubjectById,
@@ -72,4 +82,5 @@ export default {
   restoreSubjectById,
   addFavoriteSubjectById,
   addMyProfessorById,
+  searchRecordingByKeyword,
 };

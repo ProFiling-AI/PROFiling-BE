@@ -128,6 +128,26 @@ export class ModifyRecordingError extends Error {
   }
 }
 
+export class EmptySearchKeywordError extends Error {
+  errorCode = "R014";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
+export class RecordingSearchError extends Error {
+  errorCode = "R015";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
@@ -142,4 +162,6 @@ export default {
   DeleteMemoError,
   RenameMemoError,
   ModifyRecordingError,
+  EmptySearchKeywordError,
+  RecordingSearchError,
 };
