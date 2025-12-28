@@ -40,10 +40,30 @@ const restoreSubjectDto = (subject) => {
   };
 };
 
+const searchRecordingDto = (list = []) => {
+  return list.map((recording) => {
+    const duration_sec =
+      recording.started_at && recording.ended_at
+        ? Math.floor(
+            (new Date(recording.ended_at) - new Date(recording.started_at)) /
+              1000
+          )
+        : null;
+
+    return {
+      recording_id: recording.id,
+      title: recording.title,
+      duration_sec,
+      started_at: recording.started_at,
+    };
+  });
+};
+
 export default {
   subjectListDto,
   newSubjectDto,
   deleteSubjectDto,
   renameSubjectDto,
   restoreSubjectDto,
+  searchRecordingDto,
 };

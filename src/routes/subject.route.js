@@ -24,5 +24,9 @@ router.patch(
   authMiddleware,
   subjectController.addMyprofessor
 );
-
+router.get(
+  "/:subject_id/recordings/search",
+  authMiddleware,
+  subjectController.searchRecording
+);
 export default router;

@@ -1,5 +1,6 @@
 import { prisma } from "../db.config.js";
 import subjectError from "../errors/subject.error.js";
+import recordingError from "../errors/recording.error.js";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
@@ -265,6 +266,57 @@ const addMyProfessor = async (user_id, subject_id, userprofessorsubject_id) => {
   }
 };
 
+const searchRecording = async (user_id, subject_id, keyword) => {
+  try {
+    const kw = String(keyword ?? "").trim();
+    if (!kw) {
+      throw new recordingError.EmptySearchKeywordError(
+        "검색할 단어를 입력해주세요.",
+        { keyword }
+      );
+    }
+    const recordings = await prisma.recording.findMany({
+      where: {
+        title: {
+          contains: kw,
+          mode: "insensitive",
+        },
+        subject_id: Number(subject_id),
+        subject: {
+          user_id: user_id,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        started_at: true,
+        ended_at: true,
+      },
+      orderBy: [{ started_at: "desc" }, { id: "desc" }],
+    });
+
+    if (recordings.length === 0) {
+      throw new recordingError.RecordingNotFoundError(
+        "일치하는 녹음 파일이 없습니다.",
+        { keyword: kw, subject_id }
+      );
+    }
+
+    return recordings;
+  } catch (error) {
+    if (
+      error instanceof recordingError.EmptySearchKeywordError ||
+      error instanceof recordingError.RecordingNotFoundError
+    ) {
+      throw error;
+    }
+
+    throw new recordingError.RecordingSearchError(
+      "Error on Searching recording file"
+    );
+  }
+};
+
 export default {
   getSubjectList,
   createSubject,
@@ -273,4 +325,5 @@ export default {
   restoreSubject,
   favoriteSubject,
   addMyProfessor,
+  searchRecording,
 };

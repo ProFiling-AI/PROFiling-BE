@@ -101,6 +101,23 @@ const addMyprofessor = async (req, res, next) => {
   }
 };
 
+const searchRecording = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const subject_id = Number(req.params.subject_id);
+    const { keyword } = req.query;
+
+    const recording = await subjectService.searchRecordingByKeyword(
+      user_id,
+      subject_id,
+      keyword
+    );
+    return res.success(recording, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getMySubjectList,
   createMySubject,
@@ -109,4 +126,5 @@ export default {
   restoreMySubject,
   addFavoriteSubject,
   addMyprofessor,
+  searchRecording,
 };
