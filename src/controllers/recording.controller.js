@@ -147,6 +147,21 @@ const renameRecording = async (req, res, next) => {
   }
 };
 
+const deleteRecording = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = Number(req.params.recording_id);
+
+    const recording = await recordingService.deleteRecordingById(
+      user_id,
+      recording_id
+    );
+    return res.success(recording, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -157,4 +172,5 @@ export default {
   deleteOneMemo,
   renameMemo,
   renameRecording,
+  deleteRecording,
 };
