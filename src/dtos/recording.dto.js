@@ -1,10 +1,20 @@
-const recordingListDto = (user_id, list = []) => {
-  return list.map(({ id, subject_id, title, started_at }) => ({
-    record_id: id,
-    subject_id,
-    title,
-    started_at,
-  }));
+const recordingListDto = (list = []) => {
+  return list.map((recording) => {
+    const duration_sec =
+      recording.started_at && recording.ended_at
+        ? Math.floor(
+            (new Date(recording.ended_at) - new Date(recording.started_at)) /
+              1000
+          )
+        : null;
+
+    return {
+      recording_id: recording.id,
+      title: recording.title,
+      duration_sec,
+      started_at: recording.started_at,
+    };
+  });
 };
 
 const bookmarkAddDto = (bookmark) => {

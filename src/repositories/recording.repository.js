@@ -20,6 +20,7 @@ const getRecordingList = async (user_id, subject_id) => {
         subject_id: true,
         title: true,
         started_at: true,
+        ended_at: true,
       },
     });
   } catch (error) {

@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 const getRecordingList = async (req, res, next) => {
   try {
     const user_id = req.user.id;
-    const subject_id = req.query.subject_id;
+    const subject_id = Number(req.query.subject_id);
 
     const recordings = await recordingService.getRecordingListById(
       user_id,
