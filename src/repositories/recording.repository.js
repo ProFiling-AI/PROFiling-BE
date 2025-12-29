@@ -375,6 +375,61 @@ const renameRecording = async (user_id, recording_id, title) => {
   }
 };
 
+const deleteRecording = async (user_id, recording_id) => {
+  const now = dayjs().tz("Asia/Seoul").toDate();
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      // 1) 녹음 파일 있는지 확인
+      const existing = await tx.recording.findFirst({
+        where: {
+          id: Number(recording_id),
+          subject: {
+            user_id: user_id,
+          },
+        },
+        select: {
+          id: true,
+          deleted_at: true,
+        },
+      });
+
+      if (!existing) {
+        throw new recordingError.RecordingNotFoundError(
+          "녹음 파일을 찾을 수 없습니다."
+        );
+      }
+
+      // 2) 이미 삭제된 경우 그대로 반환
+      if (existing.deleted_at) {
+        return {
+          recording_id: existing.id,
+          deleted_at: existing.deleted_at,
+        };
+      }
+
+      // 3) soft delete
+      const updated = await tx.recording.update({
+        where: { id: existing.id },
+        data: { deleted_at: now },
+        select: { id: true, deleted_at: true },
+      });
+
+      return {
+        recording_id: updated.id,
+        deleted_at: updated.deleted_at,
+      };
+    });
+  } catch (error) {
+    if (error instanceof recordingError.RecordingNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.DeleteRecordingError(
+      "Error on deleting recording"
+    );
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -385,4 +440,5 @@ export default {
   deleteOneMemo,
   renameMemo,
   renameRecording,
+  deleteRecording,
 };

@@ -45,5 +45,9 @@ router.patch(
   authMiddleware,
   recordingController.renameRecording
 );
-
+router.delete(
+  "/delete/:recording_id",
+  authMiddleware,
+  recordingController.deleteRecording
+);
 export default router;

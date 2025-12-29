@@ -80,6 +80,14 @@ const renameRecordingDto = (recording) => {
   };
 };
 
+const deleteRecordingDto = (recording) => {
+  return {
+    message: "녹음파일이 삭제 되었습니다.",
+    recording_id: recording.recording_id,
+    deleted_at: recording.deleted_at,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
@@ -90,4 +98,5 @@ export default {
   deleteOneMemoDto,
   renameMemoDto,
   renameRecordingDto,
+  deleteRecordingDto,
 };
