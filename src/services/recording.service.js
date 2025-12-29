@@ -6,7 +6,7 @@ const getRecordingListById = async (user_id, subject_id) => {
     user_id,
     subject_id
   );
-  const recording_list = recordingDto.recordingListDto(user_id, recordings);
+  const recording_list = recordingDto.recordingListDto(recordings);
   return recording_list;
 };
 
