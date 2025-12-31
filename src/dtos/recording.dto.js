@@ -85,7 +85,7 @@ const renameMemoDto = (memo) => {
 const renameRecordingDto = (recording) => {
   return {
     message: "녹음파일 제목이 수정되었습니다.",
-    recording_id: recording.recording_id,
+    recording_id: recording.id,
     title: recording.title,
   };
 };
