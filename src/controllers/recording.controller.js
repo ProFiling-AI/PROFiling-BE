@@ -162,6 +162,21 @@ const deleteRecording = async (req, res, next) => {
   }
 };
 
+const restoreRecording = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const recording_id = Number(req.params.recording_id);
+
+    const recording = await recordingService.restoreRecordingById(
+      user_id,
+      recording_id
+    );
+    return res.success(recording, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -173,4 +188,5 @@ export default {
   renameMemo,
   renameRecording,
   deleteRecording,
+  restoreRecording,
 };

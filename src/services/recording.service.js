@@ -103,6 +103,15 @@ const deleteRecordingById = async (user_id, recording_id) => {
   return delete_recording;
 };
 
+const restoreRecordingById = async (user_id, recording_id) => {
+  const recording = await recordingRepository.restoreRecording(
+    user_id,
+    recording_id
+  );
+  const restore_recording = recordingDto.restoreRecordingDto(recording);
+  return restore_recording;
+};
+
 export default {
   getRecordingListById,
   addBookmarkById,
@@ -114,4 +123,5 @@ export default {
   renameMemoById,
   renameRecordingById,
   deleteRecordingById,
+  restoreRecordingById,
 };

@@ -98,6 +98,14 @@ const deleteRecordingDto = (recording) => {
   };
 };
 
+const restoreRecordingDto = (recording) => {
+  return {
+    message: "녹음파일이 복구되었습니다.",
+    recording_id: recording.id,
+    restored: true,
+  };
+};
+
 export default {
   recordingListDto,
   bookmarkAddDto,
@@ -109,4 +117,5 @@ export default {
   renameMemoDto,
   renameRecordingDto,
   deleteRecordingDto,
+  restoreRecordingDto,
 };

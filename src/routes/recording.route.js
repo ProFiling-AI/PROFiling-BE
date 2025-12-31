@@ -50,4 +50,10 @@ router.delete(
   authMiddleware,
   recordingController.deleteRecording
 );
+router.post(
+  "/restore/:recording_id",
+  authMiddleware,
+  recordingController.restoreRecording
+);
+
 export default router;
