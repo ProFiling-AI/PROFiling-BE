@@ -158,6 +158,16 @@ export class DeleteRecordingError extends Error {
   }
 }
 
+export class RestoreRecordingError extends Error {
+  errorCode = "R017";
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 400;
+    this.data = data;
+  }
+}
+
 export default {
   RecordingListError,
   BookmarkAddError,
@@ -175,4 +185,5 @@ export default {
   EmptySearchKeywordError,
   RecordingSearchError,
   DeleteRecordingError,
+  RestoreRecordingError,
 };

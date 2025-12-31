@@ -431,6 +431,47 @@ const deleteRecording = async (user_id, recording_id) => {
   }
 };
 
+const restoreRecording = async (user_id, recording_id) => {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const existing = await tx.recording.findFirst({
+        where: {
+          id: recording_id,
+          subject: {
+            user_id: user_id,
+          },
+        },
+        select: {
+          id: true,
+          deleted_at: true,
+        },
+      });
+
+      if (!existing) {
+        throw new recordingError.RecordingNotFoundError(
+          "녹음파일을 찾을 수 없습니다."
+        );
+      }
+
+      const updated = await tx.recording.update({
+        where: { id: recording_id },
+        data: { deleted_at: null },
+        select: { id: true, deleted_at: true },
+      });
+
+      return updated;
+    });
+  } catch (error) {
+    console.error("restoreRecording prisma error:", error);
+    if (error instanceof recordingError.RecordingNotFoundError) {
+      throw error;
+    }
+    throw new recordingError.RestoreRecordingError(
+      "Error on restoring recording"
+    );
+  }
+};
+
 export default {
   getRecordingList,
   addBookmark,
@@ -442,4 +483,5 @@ export default {
   renameMemo,
   renameRecording,
   deleteRecording,
+  restoreRecording,
 };
