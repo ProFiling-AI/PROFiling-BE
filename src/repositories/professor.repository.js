@@ -29,6 +29,7 @@ const findProfessorMy = async (user_id) => {
       select: {
         professor_course: {
           select: {
+            id: true,
             professor_id: true,
             professor: {
               select: {
