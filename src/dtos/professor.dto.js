@@ -9,6 +9,7 @@ const professorListDto = (list) => {
 
 const professorMyListDto = (list) => {
   return list.map((item) => ({
+    professor_course_id: item.professor_course.id,
     professor_name: item.professor_course.professor.name,
     department: item.professor_course.professor.department,
     gender: item.professor_course.professor.gender,
